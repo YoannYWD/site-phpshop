@@ -32,10 +32,40 @@
         foreach($articles as $article) {
             echo "<p>" . $article['name'] . "</p>";
             echo "<p>" . $article['price'] . "€</p>";
-            echo "<p>" . $article['desc'] . "</p>";
-            echo "<a href='add-to-cart.php?id=" . $article['id'] . "'>détail du produit</a>";
+            echo "<form action='add-to-cart.php' method='post'>"
+                 . "<input type='hidden' name='name' value='" . $article['name'] . "' />"
+                 . "<input type='hidden' name='price' value='" . $article['price'] . "' />"
+                 . "<input type='hidden' name='id' value='" . $article['id'] . "' />"
+                 . "<input type='submit' value='Ajouter au panier'></form>";
+        }
+    };
+
+
+    // RECUPERER UN PRODUIT AJOUTE DANS ADD-TO-CART
+    function getArticle($id) {
+        $articles = getArticles();
+        foreach($articles as $article) {
+            if ($id == $article['id']) {
+                return $article;
+            }
         }
     }
 
-?>
 
+    // AJOUTER DANS LE PANIER
+    function addToCart($article) {
+        $isArticleAlreadyAdded = false;
+        for($i = 0; $i < count($_SESSION['cart']) ; $i++) {
+            if ($_SESSION['cart'][$i]['id'] == $article['id']) {
+                echo "<p style='color : red'>L'article est déjà présent dans le panier</p>";
+                $isArticleAlreadyAdded = true;
+            }   
+        }
+        if (!$isArticleAlreadyAdded) {
+            $article['quantity'] = 1;
+            array_push($_SESSION['cart'], $article);
+        }
+    }
+
+
+?>

@@ -1,12 +1,27 @@
+<!-- IMPORT FUNCTIONS
+------------------------------------------------------------------->
+<?php
+require './components/functions.php';
+?>
+
+
+<!-- HEADER 
+------------------------------------------------------------------->
 <?php
 require './components/header.php';
 ?>
 
+
+<!-- AFFICHAGE DU PANIER FINAL
+------------------------------------------------------------------->
 <?php
-var_dump($_SESSION['cart'], $_GET['id']);
+
 ?>
 
 
+<!-- FOOTER
+------------------------------------------------------------------->
 <?php
 require './components/footer.php';
 ?>
+
