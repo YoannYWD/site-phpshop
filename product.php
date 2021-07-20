@@ -28,6 +28,8 @@ require './components/header.php';
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+
+
 <?php
 
 //ID, paramètre de la fonction getArticle($id) dans functions.php
@@ -35,10 +37,8 @@ $id = $_POST['id'];
 
 //PRODUCT, paramètre de la fonction showArticle($product) dans functions.php
 $article = getArticle($id);
-addToCart($article);
-// var_dump($_SESSION['cart']);
 
-displayCart();
+showArticle($article);
 
 ?>
 
@@ -48,4 +48,3 @@ displayCart();
 <?php
 require './components/footer.php';
 ?>
-

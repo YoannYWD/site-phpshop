@@ -23,7 +23,7 @@
         $articles = [];
         array_push($articles, $article1, $article2, $article3);
         return $articles;
-    };
+    }
 
 
     // AFFICHAGE DE L'ENSEMBLE DES PRODUITS
@@ -37,11 +37,14 @@
                  . "<input type='hidden' name='price' value='" . $article['price'] . "' />"
                  . "<input type='hidden' name='id' value='" . $article['id'] . "' />"
                  . "<input type='submit' value='Ajouter au panier'></form>";
+            echo "<form action='product.php' method='post'>"
+                 . "<input type='hidden' name='id' value='" . $article['id'] . "' />"
+                 . "<input type='submit' value='Voir le produit'></form>";
         }
-    };
+    }
 
 
-    // RECUPERER UN PRODUIT AJOUTE DANS ADD-TO-CART
+    // RECUPERER UN PRODUIT CLIQUÉ
     function getArticle($id) {
         $articles = getArticles();
         foreach($articles as $article) {
@@ -52,12 +55,23 @@
     }
 
 
+    // AFFICHER UN PRODUIT (PAGE PRODUCT.PHP)
+    function showArticle($article) {
+        echo "<p>" . $article['name'] . "</p>";
+        echo "<p>" . $article['price'] . "€</p>";
+        echo "<p>" . $article['desc'] . "</p>";
+        echo "<form action='add-to-cart.php' method='post'>" 
+             . "<input type='hidden' name='id' value='" . $article['id'] . "' />"
+             . "<input type='submit' value='Ajouter au panier'></form>";
+    }
+
+
     // AJOUTER DANS LE PANIER
     function addToCart($article) {
         $isArticleAlreadyAdded = false;
         for($i = 0; $i < count($_SESSION['cart']) ; $i++) {
             if ($_SESSION['cart'][$i]['id'] == $article['id']) {
-                echo "<p style='color : red'>L'article est déjà présent dans le panier</p>";
+                echo "<h4 style='color : red'>L'article est déjà présent dans le panier</h4>";
                 $isArticleAlreadyAdded = true;
             }   
         }
@@ -67,5 +81,22 @@
         }
     }
 
+    // AFFICHER LE PANIER
+    function displayCart() {
+        foreach($_SESSION["cart"] as $article) {
+            echo "<p>" . $article["name"] . "</p>";
+            echo "<p>" . $article["price"] . "€</p>";
+            echo "<p>quantité : " . $article["quantity"] . "</p>";
+        }
+    }
+
+
+    // SUPPRIMER UN PRODUIT 
+    function deleteArticle($article) {
+        if (isset($_GET["remove"]) && is_numeric($_GET["remove"]) && isset($_SESSION["cart"]) && isset($_SESSION["cart"][$_GET["remove"]])) {
+            // Remove the product from the shopping cart
+            unset($_SESSION["cart"][$_GET["remove"]]);
+        }
+    }
 
 ?>
