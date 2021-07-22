@@ -2,12 +2,10 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    //Si la session n'existe pas, on crée une nouvelle carte
+    //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-
-
 ?>
 
 <!-- IMPORT FUNCTIONS
@@ -29,8 +27,6 @@ require './components/header.php';
 <?php
 showArticles();
 ?>
-
-
 
 
 <!-- FOOTER

@@ -23,7 +23,6 @@
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
-
 ?>
 
 
@@ -54,17 +53,12 @@ deleteAllBtn();
 $total=0;
 $totalQuantity=0;
 totalPrice($total, $totalQuantity);
-?>
-
-<?php
 
 $total = 0;
 $totalWithShippingFees = 0;
 $totalQuantity=0;
 priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
-
 ?>
-
 
 
 <!-- FOOTER

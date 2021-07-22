@@ -23,13 +23,7 @@
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
-
-
-    
-
 ?>
-
-
 
 
 <!-- AFFICHAGE DU OU DES PRODUITS
@@ -52,15 +46,19 @@
 </table>
 
 <?php
+// bouton supprimer tous les articles
 deleteAllBtn();
 
+// calcul du prix final et de la quantité totale d'article
 $total=0;
 $totalQuantity=0;
 totalPrice($total, $totalQuantity);
 
+// bouton retour page articles
+backToArticles();
 
-validateShoppingCart();
-
+// bouton valider le panier
+validateAddToCart();
 ?>
 
 
