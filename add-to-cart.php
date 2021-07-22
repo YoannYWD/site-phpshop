@@ -2,45 +2,60 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    //Si la session n'existe pas, on crée une nouvelle carte
+    require './components/functions.php';
+    require './components/header.php';
+
+    //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-
+    if (isset($_POST['deleteArticle'])) {
+        deleteArticle($_POST['deleteArticle']);
+    }
+    if (isset($_POST['id'])) {
+        $id = $_POST['id']; //ID, paramètre de la fonction getArticle($id) dans functions.php
+        $article = getArticle($id); //ARTICLE, paramètre de la fonction showArticle($article) dans functions.php
+        addToCart($article);
+    }
+    if (isset($_POST['deleteAllArticles'])) {
+        deleteAllArticles();
+    }
+    if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
+        changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+    }
 
 ?>
 
-<!-- IMPORT FUNCTIONS
-------------------------------------------------------------------->
-<?php
-require './components/functions.php';
-?>
 
-
-<!-- HEADER 
-------------------------------------------------------------------->
-<?php
-require './components/header.php';
-?>
-
-<input type="button" value="Retour" onclick="window.history.back()" />
 
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+<table>
+    <thead>
+        <tr>
+            <td><p>Référence</p></td>
+            <td><p>Nom de l'article</p></td>
+            <td><p>Prix</p></td>
+            <td><p>Quantité</p></td>
+            <td><p>Total article</p></td>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        displayCart();
+        ?>
+    <tbody>
+</table>
+
 <?php
+deleteAllBtn();
 
-//ID, paramètre de la fonction getArticle($id) dans functions.php
-$id = $_POST['id'];
-
-//PRODUCT, paramètre de la fonction showArticle($product) dans functions.php
-$article = getArticle($id);
-addToCart($article);
-// var_dump($_SESSION['cart']);
-
-displayCart();
-
+$total=0;
+totalPrice($total);
 ?>
+
+
 
 
 <!-- FOOTER

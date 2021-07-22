@@ -2,34 +2,59 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    //Si la session n'existe pas, on crée une nouvelle carte
+    require './components/functions.php';
+    require './components/header.php';
+
+    //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-
+    if (isset($_POST['deleteArticle'])) {
+        deleteArticle($_POST['deleteArticle']);
+    }
+    if (isset($_POST['id'])) {
+        $id = $_POST['id']; //ID, paramètre de la fonction getArticle($id) dans functions.php
+        $article = getArticle($id); //ARTICLE, paramètre de la fonction showArticle($article) dans functions.php
+        addToCart($article);
+    }
+    if (isset($_POST['deleteAllArticles'])) {
+        deleteAllArticles();
+    }
+    if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
+        changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+    }
 
 ?>
 
 
-<!-- IMPORT FUNCTIONS
+
+
+<!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+<table>
+    <thead>
+        <tr>
+            <td><p>Référence</p></td>
+            <td><p>Nom de l'article</p></td>
+            <td><p>Prix</p></td>
+            <td><p>Quantité</p></td>
+            <td><p>Total article</p></td>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        displayCart();
+        ?>
+    <tbody>
+</table>
+
 <?php
-require './components/functions.php';
+deleteAllBtn();
+
+$total=0;
+totalPrice($total);
 ?>
 
-
-<!-- HEADER 
-------------------------------------------------------------------->
-<?php
-require './components/header.php';
-?>
-
-
-<!-- AFFICHAGE DU PANIER FINAL
-------------------------------------------------------------------->
-<?php
-
-?>
 
 
 <!-- FOOTER
