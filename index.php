@@ -24,9 +24,15 @@ require './components/header.php';
 
 <!-- DISPLAY ARTICLES
 ------------------------------------------------------------------->
-<?php
-showArticles();
-?>
+<div class="container">
+    <div class="row">
+        <?php
+        showArticles();
+        ?>
+    </div>
+</div>
+
+
 
 
 <!-- FOOTER

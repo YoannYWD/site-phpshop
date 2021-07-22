@@ -4,6 +4,7 @@
     function getArticles() {
         $article1 = [
             "id" => 1,
+            "img" => "./assets/images/leve-cadre.jpg",
             "name" => "Lève-cadres longueur 250 mm",
             "price" => 9,
             "totalPrice" => 9, 
@@ -11,6 +12,7 @@
         ];
         $article2 = [
             "id" => 2,
+            "img" => "./assets/images/ruche.jpg",
             "name" => "Ruche Dadant 10 cadres mi-bois avec plateau milieu aéré, sans cadres",
             "price" => 64.90,
             "totalPrice" => 64.90,
@@ -18,6 +20,7 @@
         ];
         $article3 = [
             "id" => 3,
+            "img" => "./assets/images/cadre.png",
             "name" => "Cadre filé pour ruche Dadant",
             "price" => 1.80,
             "totalPrice" => 1.80,
@@ -33,32 +36,64 @@
     function showArticles() {
         $articles = getArticles();
         foreach($articles as $article) {
-            echo "<p>" . $article['name'] . "<br>
-                 " . $article['price'] . "€</p>
-                 <form action='add-to-cart.php' method='post'>
-                    <input type='hidden' name='name' value='" . $article['name'] . "' />
-                    <input type='hidden' name='price' value='" . $article['price'] . "' />
-                    <input type='hidden' name='id' value='" . $article['id'] . "' />
-                    <input type='submit' value='Ajouter au panier'/>
-                 </form>
-                 <form action='product.php' method='post'>
-                    <input type='hidden' name='id' value='" . $article['id'] . "' />
-                    <input type='submit' value='Voir le produit'/>
-                 </form>";
+            echo "
+                <div class=\"col-12 col-lg-4 text-center\">
+                    <div class=\"card\">
+                        <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
+                        <div class=\"card-body\">
+                            <h5 class=\"card-title\">" . $article['name'] . "</h5>
+                            <p class=\"card-text\">" . $article['price'] . "€</p>
+                            <form action=\"add-to-cart.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"name\" value=\"" . $article['name'] . "\" />
+                                <input type=\"hidden\" name=\"price\" value=\"" . $article['price'] . "\" />
+                                <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                <input type=\"submit\" value=\"Ajouter au panier\"/>
+                            </form>
+                            <form action=\"product.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                <input type=\"submit\" value=\"Voir le produit\"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            
+                 ";
         }
     }
 
 
+
+
     // AFFICHER UN PRODUIT DANS LA PAGE PRODUCT.PHP
     function showArticle($article) {
-        echo "<p>" . $article["name"] . " <br>
-             " . $article["price"] . "€ <br>
-             " . $article["desc"] . "</p>
+        echo "<div class=\"card mb-3\">
+                <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
+                <div class=\"card-body\">
+                    <h5 class=\"card-title\">" . $article['name'] . "</h5>
+                    <p class=\"card-text\">" . $article['desc'] . "</p>
+                    <p class=\"card-text\"><small class=\"text-muted\">" . $article['price'] . "</small></p>
+                </div>
+             </div>
              <form action='add-to-cart.php' method='post'> 
                 <input type='hidden' name='id' value='" . $article['id'] . "' />
                 <input type='submit' value='Ajouter au panier'/>
               </form>";
     }
+
+
+    // AFFICHAGE BOUTON "RETOUR" PAGE PRODUCT.PHP
+    function backToMainPage() {
+        echo "  
+                <tr>
+                    <td>
+                        <form action=\"index.php\" method=\"post\">
+                            <input type=\"submit\" value=\"retour\"/>
+                        </form>
+                    </td>
+                </tr>
+             ";   
+    }
+
 
 
     // RECUPERER UN PRODUIT CLIQUÉ POUR AJOUT AU PANIER
@@ -266,7 +301,7 @@
     }
 
 
-    // PRIX AVEC FRAIS DE PORT + BOUTON VALIDER LA COMMANDE
+    // PRIX AVEC FRAIS DE PORT
     function priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity) {
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
@@ -275,11 +310,19 @@
                 $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
                 $totalWithShippingFees = $total + ($totalQuantity * $shippingFees);               
             }
-            echo "Total du panier avec frais de port (1€ par article) : " . $totalWithShippingFees . "€.
-                 <form action=\"index.php\" method=\"post\">
-                    <input type=\"submit\" value=\"Valider ma commande\"/>
-                  </form>";
+            echo "Total du panier avec frais de port (1€ par article) : " . $totalWithShippingFees . "€.";
         }
+    }
+
+
+    // BOUTON VALIDER LA COMMANDE
+    function validateShoppingCart() {
+        $_SESSION["cart"] = [];
+        echo "
+            <form action=\"index.php\" method=\"post\">
+                <input type=\"submit\" value=\"Valider ma commande\"/>
+            </form>
+            "; 
     }
 
 

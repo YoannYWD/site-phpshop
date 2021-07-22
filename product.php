@@ -23,12 +23,15 @@ require './components/functions.php';
 require './components/header.php';
 ?>
 
-<input type="button" value="Retour" onclick="window.history.back()" />
-
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+<?php
+backToMainPage();
+?>
 
+<div class="container">
+    <div class="row">
 
 <?php
 
@@ -42,6 +45,8 @@ showArticle($article);
 
 ?>
 
+    </div>
+</div>
 
 <!-- FOOTER
 ------------------------------------------------------------------->

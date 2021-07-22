@@ -26,8 +26,6 @@
 ?>
 
 
-
-
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
 <table>
@@ -58,6 +56,8 @@ $total = 0;
 $totalWithShippingFees = 0;
 $totalQuantity=0;
 priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
+
+validateShoppingCart();
 ?>
 
 
