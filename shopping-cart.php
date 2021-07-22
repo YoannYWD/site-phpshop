@@ -43,7 +43,7 @@
     </thead>
     <tbody>
         <?php
-        displayCart();
+        displayFinalCart();
         ?>
     <tbody>
 </table>
@@ -52,7 +52,17 @@
 deleteAllBtn();
 
 $total=0;
-totalPrice($total);
+$totalQuantity=0;
+totalPrice($total, $totalQuantity);
+?>
+
+<?php
+
+$total = 0;
+$totalWithShippingFees = 0;
+$totalQuantity=0;
+priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
+
 ?>
 
 

@@ -24,6 +24,9 @@
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
 
+
+    
+
 ?>
 
 
@@ -52,7 +55,12 @@
 deleteAllBtn();
 
 $total=0;
-totalPrice($total);
+$totalQuantity=0;
+totalPrice($total, $totalQuantity);
+
+
+validateShoppingCart();
+
 ?>
 
 

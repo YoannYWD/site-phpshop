@@ -4,7 +4,7 @@
     function getArticles() {
         $article1 = [
             "id" => 1,
-            "name" => "Lève-cadres Hole longueur 250 mm",
+            "name" => "Lève-cadres longueur 250 mm",
             "price" => 9,
             "totalPrice" => 9, 
             "desc" => "Lève-cadres ergonomique, robuste et astucieux ! "
@@ -58,7 +58,7 @@
     }
 
 
-    // AFFICHER UN PRODUIT (PAGE PRODUCT.PHP)
+    // AFFICHER UN PRODUIT 
     function showArticle($article) {
         echo "<p>" . $article["name"] . "</p>";
         echo "<p>" . $article["price"] . "€</p>";
@@ -88,7 +88,7 @@
     function displayCart() {
         if(count($_SESSION["cart"]) > 0) {
             foreach($_SESSION["cart"] as $article) {
-                $totalQuantity = $article["totalPrice"] / $article["price"];
+
                 echo "
                         <tr>
                             <td>" . $article["id"] . "</td>
@@ -100,8 +100,9 @@
                             </td>
                             <td>
                                 <form action=\"add-to-cart.php\" method=\"post\"> 
-                                    quantité : " . $totalQuantity . "<input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" value=\"" . $article["quantity"] . "\">
+                                    quantité : <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" value=\"" . $article["quantity"] . "\">
                                     <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
+
                                     <input type=\"submit\" value=\"Modifier la quantité\"/>
                                 </form>
                             </td>
@@ -142,8 +143,8 @@
             echo "
                     <td>
                         <form action=\"add-to-cart.php\" method=\"post\">
-                        <input type=\"hidden\" name=\"deleteAllArticles\"/>
-                        <input type=\"submit\" value=\"Supprimer le panier\"/>
+                            <input type=\"hidden\" name=\"deleteAllArticles\"/>
+                            <input type=\"submit\" value=\"Supprimer le panier\"/>
                         </form>
                     </td>
                  ";           
@@ -158,12 +159,14 @@
     
 
     // AFFICHER LE PRIX TOTAL DU PANIER
-    function totalPrice($total) {
+    function totalPrice($total, $totalQuantity) {
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
-                $total += $_SESSION["cart"][$i]["totalPrice"];               
+                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);                
             }
-            echo "Total du panier : " . $total . "€";
+            echo "La quantité totale d'article est de " . $totalQuantity . ".";
+            echo "Total du panier : " . $total . "€.";
         }
     }
 
@@ -173,9 +176,88 @@
         for($i = 0; $i < count($_SESSION["cart"]); $i++) {
             if ($_SESSION["cart"][$i]["quantity"] !== $quantity && $_SESSION["cart"][$i]["id"] == $articleid) {
                 $_SESSION["cart"][$i]["totalPrice"] = $_SESSION["cart"][$i]["price"] * $quantity;
+                $_SESSION["cart"][$i]["quantity"] = $quantity;
                 echo "<p>La quantité a été modifiée.</p>";
 
             } 
+        }
+    }
+
+    // AFFICHAGE VALIDATION COMMANDE
+    function validateShoppingCart() {
+        if(count($_SESSION["cart"]) > 0) {
+            echo "  
+                    <tr>
+                        <td>
+                            <form action=\"index.php\" method=\"post\">
+                                <input type=\"submit\" value=\"Continuer mes achats\"/>
+                            </form>
+                        </td>
+                        <td>
+                            <form action=\"shopping-cart.php\" method=\"post\">
+                                <input type=\"submit\" value=\"Valider la commande\"/>
+                            </form>
+                        </td>
+                    </tr>
+                 ";   
+        }
+
+    }
+
+
+        // AFFICHER LE PANIER DE VALIDATION
+        function displayFinalCart() {
+            if(count($_SESSION["cart"]) > 0) {
+                foreach($_SESSION["cart"] as $article) {
+                    echo "
+                            <tr>
+                                <td>" . $article["id"] . "</td>
+                                <td>" . $article["name"] . "</td>
+                                <td>" . $article["price"] . "€
+                                    <form action=\"shopping-cart.php\" method=\"post\"> 
+                                        <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["price"] . "\">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action=\"shopping-cart.php\" method=\"post\"> 
+                                        quantité : <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" value=\"" . $article["quantity"] . "\">
+                                        <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
+                                        <input type=\"submit\" value=\"Modifier la quantité\"/>
+                                    </form>
+                                </td>
+                                <td>" . $article["totalPrice"]. "€
+                                    <form action=\"shopping-cart.php\" method=\"post\"> 
+                                        <input type=\"hidden\" name=\"itotalPrice\" value=\"" . $article["totalPrice"] . "\">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action=\"shopping-cart.php\" method=\"post\">
+                                        <input type=\"hidden\" name=\"deleteArticle\" value=\"" . $article["id"] . "\"/>
+                                        <input type=\"submit\" value=\"Supprimer\"/>
+                                    </form>
+                                </td>                            
+                            </tr>
+                        ";
+                }
+            } else {
+                echo "<p>Votre panier est vide</p>";
+            }
+        }
+
+
+    // PRIX AVEC FRAIS DE PORT
+    function priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity) {
+        if(count($_SESSION["cart"]) > 0) {
+            for($i = 0; $i < count($_SESSION["cart"]); $i++) {
+                $shippingFees = 1;
+                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
+                $totalWithShippingFees = $total + ($totalQuantity * $shippingFees);               
+            }
+            echo "Total du panier avec frais de port (1€ par article) : " . $totalWithShippingFees . "€.";
+            echo "<form action=\"index.php\" method=\"post\">
+                    <input type=\"submit\" value=\"Valider ma commande\"/>
+                  </form>";
         }
     }
 
