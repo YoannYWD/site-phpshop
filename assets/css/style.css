@@ -1,0 +1,204 @@
+/*
+COLOR
+- White #FFFFFF
+- Marron #502910
+
+
+FONTS
+    navbar:
+    - Otomanopee One
+
+    title h1 :
+    - Otomanopee One
+
+    title h2 -> h6 :
+    - Montserrat
+
+    p :
+    - Oswald
+
+
+1- GLOBAL
+2- NAVBAR
+3- INDEX.PHP
+4- ADD-TO-CART.PHP
+5- SHOPPING-CART.PHP
+6- FOOTER
+
+*/
+
+/* GLOBAL 
+*****************************************/
+
+body {
+    background-image: linear-gradient(#EEBA49ab, #ffffffc2),url(../images/fond.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    
+}
+
+
+h1 {
+    font-family: 'Otomanopee One', Arial, Helvetica, sans-serif;
+    color: #FFFFFF;  
+}
+
+h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+p {
+    font-family: 'Oswald', Arial, Helvetica, sans-serif;
+ 
+}
+
+p span {
+    font-size: 0.8em;
+}
+
+.mainContainer {
+    margin: 50px;
+}
+.titlePageContainer {
+    margin-top: 200px;
+}
+
+form input {
+    margin-bottom: 10px;
+    font-family: 'Oswald', Arial, Helvetica, sans-serif;
+}
+
+form button {
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5em;
+    transition: 0.5s;
+}
+form button:hover {
+    transform: rotate(20deg);
+    transition: 0.5s;
+}
+
+
+
+/* NAVBAR
+*****************************************/
+
+nav {
+    font-family: 'Otomanopee One', Arial, Helvetica, sans-serif;
+    background-color: #502910;
+}
+
+.navbar-brand img {
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+}
+
+.navbar-brand span{
+    font-size: 1.5em!important;
+    position: relative;
+    left: -23px;
+    top: 6px;
+}
+
+
+
+
+
+/* INDEX.PHP
+*****************************************/
+.containerCart {
+    position: fixed;
+    top: 155px;
+}
+
+.itemCart {
+    background-color: #FFFFFF;
+    color: #502910;
+    padding: 30px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.itemCart i {
+    font-size: 2.5em;
+}
+
+.itemCartQuantity {
+    color: #FFFFFF;
+    position: absolute;
+    top: 33px;
+    left: 65px;
+}
+
+
+
+/* ADD-TO-CART.PHP
+*****************************************/
+.summary h5 {
+    text-decoration: underline;
+}
+
+p.text-muted {
+    font-size: 0.8em;
+}
+
+p.backToArticles a {
+    text-decoration: none;
+    color: #502910;    
+}
+
+
+/* SHOPPING-CART.PHP
+*****************************************/
+.summary .totalTTC {
+    font-size: 1.5em!important;
+}
+
+
+/* FOOTER
+*****************************************/
+footer {
+    background-color: #502910;
+}
+footer h2 {
+    color: #FFFFFF;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.contactsContainer h2 {
+    color: #FFFFFF;
+}
+.contactsContainer h5 {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.contactsContainer p {
+    color: #FFFFFF;
+}
+
+p.links a {
+    text-decoration: none;
+}
+p.links i {
+    font-size: 2em;
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-bottom: 25px;
+    color: #FFFFFF;
+    transition: 0.5s;
+}
+p.links i:hover {
+    transform: scale(1.2);
+    transition: 0.5s;
+}
+
+p.copyright {
+    font-size: 0.7em;
+    margin-bottom: 20px;
+}
+

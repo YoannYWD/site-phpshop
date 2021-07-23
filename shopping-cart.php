@@ -23,42 +23,60 @@
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
+    if (isset($_POST['validateAndDeleteAllArticles'])) {
+        validateShoppingCart();
+    }
 ?>
 
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
-<table>
-    <thead>
-        <tr>
-            <td><p>Référence</p></td>
-            <td><p>Nom de l'article</p></td>
-            <td><p>Prix</p></td>
-            <td><p>Quantité</p></td>
-            <td><p>Total article</p></td>
-        </tr>
-    </thead>
-    <tbody>
+<div class="container titlePageContainer">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>Valider votre commande</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mainContainer">
+    <div class="row">
+        <div class="col-12 summary">
+            <div class="card mb-3 p-2">
+
+                <?php
+
+                // calcul du prix final et de la quantité totale d'article
+                $total=0;
+                $totalQuantity=0;
+                finalTotalPrice($total, $totalQuantity);
+                
+                // Prix avec frais de port
+                $total = 0;
+                $totalWithShippingFees = 0;
+                $totalQuantity=0;
+                priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
+
+                // bouton supprimer tous les articles
+                deleteAllBtn();
+
+                ?>
+            </div>
+        </div>
+        <div class="col-12 text-center">
         <?php
-        displayFinalCart();
+        validateShoppingCart();
         ?>
-    <tbody>
-</table>
-
-<?php
-deleteAllBtn();
-
-$total=0;
-$totalQuantity=0;
-totalPrice($total, $totalQuantity);
-
-$total = 0;
-$totalWithShippingFees = 0;
-$totalQuantity=0;
-priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
-
-validateShoppingCart();
-?>
+        </div>
+        <div class="col-12">
+            <?php
+            displayFinalCart();
+            backToArticles();
+            ?>     
+        </div>
+    </div>
+</div>
 
 
 <!-- FOOTER

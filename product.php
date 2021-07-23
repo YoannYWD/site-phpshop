@@ -26,12 +26,32 @@ require './components/header.php';
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+<div class="container-fluid containerCart">
+    <div class="row">
+        <div class="col-1 offset-11 text-center">
+        <i class="fas fa-shopping-cart"></i>
+        <?php
+            $totalQuantity=0;
+            totalQuantity($totalQuantity);
+        ?>
+        </div>
+    </div>
+</div>
+
+<div class="container titlePageContainer">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>En détail</h1>
+        </div>
+    </div>
+</div>
+
 <?php
 backToMainPage();
 ?>
 
-<div class="container">
-    <div class="row">
+<div class="container mainContainer">
+    <div class="row text-center">
 
 <?php
 
