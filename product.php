@@ -55,16 +55,14 @@ require './components/header.php';
 <div class="container mainContainer">
     <div class="row text-center">
         <?php
+            //ID, paramètre de la fonction getArticle($id) dans functions.php
+            $id = $_POST['id'];
 
+            //PRODUCT, paramètre de la fonction showArticle($product) dans functions.php
+            $article = getArticle($id);
 
-//ID, paramètre de la fonction getArticle($id) dans functions.php
-$id = $_POST['id'];
-
-//PRODUCT, paramètre de la fonction showArticle($product) dans functions.php
-$article = getArticle($id);
-
-showArticle($article);
-?>
+            showArticle($article);
+        ?>
     </div>
     <div class="row text-center">
         <?php

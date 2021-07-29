@@ -9,6 +9,9 @@
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
+    if (isset($_POST["validateAndDeleteAllArticles"])) {
+        deleteAllArticles();
+    }
 ?>
 
 <!-- HEADER 
@@ -31,7 +34,7 @@ require './components/header.php';
 <div class="container mainContainer">
     <div class="row">
         <?php
-        showArticles();
+            showArticles();
         ?>
     </div>
 </div>

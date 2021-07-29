@@ -1,5 +1,33 @@
 <?php
 
+/* 
+INDEX 
+
+- CREATION D'UN TABLEAU REGROUPANT LES PRODUITS
+- AFFICHAGE DE L'ENSEMBLE DES PRODUITS
+- AFFICHER UN PRODUIT DANS LA PAGE PRODUCT.PHP
+- AFFICHAGE BOUTON "CONTINUER MES ACHATS" PAGE PRODUCT.PHP
+- RECUPERER UN PRODUIT CLIQUÉ POUR AJOUT AU PANIER
+- AJOUTER LE PRODUIT DANS LE PANIER
+- AFFICHER LE PANIER
+- SUPPRIMER UN PRODUIT 
+- AFFICHAGE BOUTON SUPPRIMER TOUS LES PRODUITS
+- SUPPRIMER TOUS LES PRODUITS
+- AFFICHER LE PRIX TOTAL DU PANIER
+- FONCTIONS AFFICHAGE QUANTITE TOTALE
+- MODIFIER LA QUANTITE
+- AFFICHAGE PHRASE RETOUR PAGE ARTICLES
+- AFFICHAGE BOUTON CONTINUER MES ACHATS
+- AFFICHAGE BOUTON VALIDATION DE PANIER
+- AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
+- AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION
+- AFFICHER LE PANIER DANS LA PAGE SHOPPING-CART.PHP
+- PRIX AVEC FRAIS DE PORT
+- BOUTON VALIDER LA COMMANDE
+
+**************************************************************/
+
+
     // CREATION D'UN TABLEAU REGROUPANT LES PRODUITS
     function getArticles() {
         $article1 = [
@@ -390,6 +418,40 @@
         }
 
     }
+
+    // AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
+    function showMoreArticles($article) {
+        if(count($_SESSION["cart"]) > 0) {
+            for($i = 0; $i < count($_SESSION["cart"]); $i++){
+                    if ($_SESSION["cart"][$i]["id"] == $article["id"] && !in_array($article["id"], $_SESSION["cart"][$i])) {
+                        $priceFormat = number_format($article["price"], 2, ",", " ");
+                        echo "
+                                <div class=\"col-12 col-lg-4 text-center mb-3\">
+                                    <div class=\"card\">
+                                        <img src=\"" . $article["img"] . "\" class=\"card-img-top\" alt=\"image produit\">
+                                        <div class=\"card-body\">
+                                            <h5 class=\"card-title\">" . $article["name"] . "</h5>
+                                            <p class=\"card-text\"><span>" . $article["specPrice"] . "</span>" . " " . $priceFormat . "€</p>
+                                            <form action=\"product.php\" method=\"post\">
+                                                <input type=\"hidden\" name=\"id\" value=\"" . $article["id"] . "\" />
+                                                <input type=\"submit\" value=\"En détails\" class=\"buttonLarge\"/>
+                                            </form>
+                                            <form action=\"add-to-cart.php\" method=\"post\">
+                                                <input type=\"hidden\" name=\"name\" value=\"" . $article["name"] . "\" />
+                                                <input type=\"hidden\" name=\"price\" value=\"" . $article["price"] . "\" />
+                                                <input type=\"hidden\" name=\"id\" value=\"" . $article["id"] . "\" />
+                                                <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>                  
+                            ";     
+                    } 
+                }
+            
+        }
+    }
+
 
 
     // AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION

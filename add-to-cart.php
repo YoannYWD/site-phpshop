@@ -70,18 +70,16 @@
         
         <div class="col-12 col-xl-10">
             <?php
-            displayCart();
+                displayCart();
 
-            // Si panier vide, phrase retour page articles
-            backToArticles();
-            ?>
-            
+                // Si panier vide, phrase retour page articles
+                backToArticles();
+            ?>      
         </div>
         <div class="col-12 col-md-4 offset-md-4 col-xl-2 offset-xl-0 summary">
             <div class="card mb-3 p-2 summaryCard">
 
                 <?php
-
                 // calcul du prix final et de la quantité totale d'article
                 $total=0;
                 $totalQuantity=0;
@@ -89,25 +87,18 @@
 
                 // bouton supprimer tous les articles
                 deleteAllBtn();
-
-
-
-
                 ?>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-12 text-center">
-            <?php
-
-            
+            <?php  
                 // Continuer à faire du shopping
                 continueShopping();
-                            // bouton valider le panier
-                            validateAddToCart();
 
-            
+                // bouton valider le panier
+                validateAddToCart();            
             ?>
         </div>
     </div>
@@ -124,7 +115,11 @@
 <div class="container displayArticles">
     <div class="row">
         <?php
-        showArticles();
+            if (isset($_POST['id'])) {
+                $id = $_POST['id'];
+                $article = getArticle($id);
+                showMoreArticles($article);
+            }
         ?>
     </div>
 </div>

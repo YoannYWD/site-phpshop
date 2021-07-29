@@ -63,9 +63,7 @@
     <div class="row">
         <div class="col-12 summary">
             <div class="card mb-3 p-2">
-
                 <?php
-
                 // calcul du prix final et de la quantité totale d'article
                 $total=0;
                 $totalQuantity=0;
@@ -79,19 +77,18 @@
 
                 // bouton supprimer tous les articles
                 deleteAllBtn();
-
                 ?>
             </div>
         </div>
         <div class="col-12 text-center">
-        <?php
-        validateShoppingCart();
-        ?>
+            <?php
+                validateShoppingCart();
+            ?>
         </div>
         <div class="col-12">
             <?php
-            displayFinalCart();
-            backToArticles();
+                displayFinalCart();
+                backToArticles();
             ?>     
         </div>
     </div>
