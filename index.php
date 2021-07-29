@@ -39,20 +39,19 @@ require './components/header.php';
 
 <div class="container-fluid containerCart">
     <div class="row">
-        <div class="col-1 offset-11 text-center">
-            <div class="col-12 itemCart">
-                <p>
-                    <i class="fas fa-shopping-cart"></i>
-                </p>
-                <div class="itemCartQuantity">
-                    <p>
+        <div class="offset-8 col-4 offset-sm-9 col-sm-3 offset-md-10 col-md-2 offset-xxl-11 col-xxl-1">
+            <a href="/phpshop/add-to-cart">
+                <div class="itemCart text-center">
+                    <p class="mt-1 mb-0">Mon panier</p>
+                    <p class="m-0 mb-1">
+                        <i class="fas fa-shopping-cart"></i>                        
                         <?php
                             $totalQuantity=0;
                             totalQuantity($totalQuantity);
                         ?>
                     </p>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>

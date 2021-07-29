@@ -26,34 +26,36 @@ require './components/header.php';
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
-<div class="container-fluid containerCart">
-    <div class="row">
-        <div class="col-1 offset-11 text-center">
-        <i class="fas fa-shopping-cart"></i>
-        <?php
-            $totalQuantity=0;
-            totalQuantity($totalQuantity);
-        ?>
-        </div>
-    </div>
-</div>
-
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">
-            <h1>En détail</h1>
+            <h1>En détails</h1>
         </div>
     </div>
 </div>
 
-<?php
-backToMainPage();
-?>
+<div class="container-fluid containerCart">
+    <div class="row">
+        <div class="col-1 offset-11">
+            <a href="/phpshop/add-to-cart">
+                <div class="itemCart text-center">
+                    <p>Mon panier
+                        <i class="fas fa-shopping-cart"></i>                        
+                        <?php
+                            $totalQuantity=0;
+                            totalQuantity($totalQuantity);
+                        ?>
+                    </p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
 
 <div class="container mainContainer">
     <div class="row text-center">
+        <?php
 
-<?php
 
 //ID, paramètre de la fonction getArticle($id) dans functions.php
 $id = $_POST['id'];
@@ -62,9 +64,12 @@ $id = $_POST['id'];
 $article = getArticle($id);
 
 showArticle($article);
-
 ?>
-
+    </div>
+    <div class="row text-center">
+        <?php
+            backToMainPage();
+        ?>
     </div>
 </div>
 

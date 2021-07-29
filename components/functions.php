@@ -14,7 +14,7 @@
         $article2 = [
             "id" => 2,
             "img" => "./assets/images/ruche.jpg",
-            "name" => "Ruche Dadant 10 cadres mi-bois",
+            "name" => "Ruche Dadant 10 cadres bois",
             "price" => 64.90,
             "specPrice" => "",
             "totalPrice" => 64.90,
@@ -41,21 +41,21 @@
         foreach($articles as $article) {
             $priceFormat = number_format($article['price'], 2, ",", " ");
             echo "
-                <div class=\"col-12 col-lg-4 text-center\">
+                <div class=\"col-12 col-lg-4 text-center mb-3\">
                     <div class=\"card\">
                         <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
                         <div class=\"card-body\">
                             <h5 class=\"card-title\">" . $article['name'] . "</h5>
                             <p class=\"card-text\"><span>" . $article['specPrice'] . "</span>" . " " . $priceFormat . "€</p>
+                            <form action=\"product.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                <input type=\"submit\" value=\"En détails\" class=\"buttonLarge\"/>
+                            </form>
                             <form action=\"add-to-cart.php\" method=\"post\">
                                 <input type=\"hidden\" name=\"name\" value=\"" . $article['name'] . "\" />
                                 <input type=\"hidden\" name=\"price\" value=\"" . $article['price'] . "\" />
                                 <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
-                                <input type=\"submit\" value=\"Ajouter au panier\"/>
-                            </form>
-                            <form action=\"product.php\" method=\"post\">
-                                <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
-                                <input type=\"submit\" value=\"Voir le produit\"/>
+                                <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
                             </form>
                         </div>
                     </div>
@@ -77,22 +77,23 @@
                     <h5 class=\"card-title\">" . $article['name'] . "</h5>
                     <p class=\"card-text\">" . $article['desc'] . "</p>
                     <p class=\"card-text\"><small class=\"text-muted\"><span>" . $article['specPrice'] . "</span>" . " " . $priceFormat . "€</small></p>
+                    <form action=\"add-to-cart.php\" method=\"post\"> 
+                       <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                       <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
+                    </form>
                 </div>
-             </div>
-             <form action='add-to-cart.php' method='post'> 
-                <input type='hidden' name='id' value='" . $article['id'] . "' />
-                <input type='submit' value='Ajouter au panier'/>
-              </form>";
+              </div>
+            ";
     }
 
 
-    // AFFICHAGE BOUTON "RETOUR" PAGE PRODUCT.PHP
+    // AFFICHAGE BOUTON "CONTINUER MES ACHATS" PAGE PRODUCT.PHP
     function backToMainPage() {
         echo "  
                 <tr>
                     <td>
                         <form action=\"index.php\" method=\"post\">
-                            <input type=\"submit\" value=\"retour\"/>
+                            <input type=\"submit\" value=\"Continuer mes achats\" class=\"buttonLarge\"/>
                         </form>
                     </td>
                 </tr>
@@ -160,7 +161,7 @@
                                     <form action=\"add-to-cart.php\" method=\"post\"> 
                                         <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" size=\"5\" value=\"" . $article["quantity"] . "\">
                                         <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
-                                        <input type=\"submit\" value=\"Modifier\"/>
+                                        <input type=\"submit\" value=\"Modifier\" class=\"button\"/>
                                     </form>
                                 </div>
                             </div>
@@ -176,7 +177,7 @@
                                 <div class=\"card-body\">
                                     <form action=\"add-to-cart.php\" method=\"post\">
                                         <input type=\"hidden\" name=\"deleteArticle\" value=\"" . $article["id"] . "\"/>
-                                        <button type=\"submit\"><i class=\"fas fa-trash-alt\"></i></button>
+                                        <button type=\"submit\"><i class=\"fas fa-trash-alt\" class=\"btn\"></i></button>
                                     </form>
                                 </div>
                             </div>
@@ -190,10 +191,6 @@
                   </div>";
         }
     }
-
-
-
-
 
 
     // SUPPRIMER UN PRODUIT 
@@ -224,9 +221,6 @@
                  ";           
         }
     }
-
-
-
 
 
     // SUPPRIMER TOUS LES PRODUITS
@@ -365,14 +359,14 @@
     }
 
 
-    // AFFICHAGE BOUTON VALIDATION DE PANIER
+    // AFFICHAGE BOUTON CONTINUER MES ACHATS
     function continueShopping() {
         if(count($_SESSION["cart"]) > 0) {
             echo "
                     <div class=\"row\">
                         <div class=\"col-12 text-center\">
                             <form action=\"index.php\" method=\"post\">
-                                <input type=\"submit\" value=\"Continuer mes achats\"/>
+                                <input type=\"submit\" value=\"Continuer mes achats\" class=\"buttonLarge\"/>
                             </form>
                         </div>
                     </div>
@@ -388,7 +382,7 @@
                     <div class=\"row\">
                         <div class=\"col-12 text-center\">
                             <form action=\"shopping-cart.php\" method=\"post\">
-                                <input type=\"submit\" value=\"Valider la commande\"/>
+                                <input type=\"submit\" value=\"Valider ma commande\" class=\"buttonLargeImpact\"/>
                             </form>
                         </div>
                     </div>
@@ -414,34 +408,34 @@
                 echo " 
                         <h5 class=\"text-center mt-2 mb-3\">Récapitulatif</h5>
                         <div class=\"row\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p>Articles : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-end\">$totalQuantity</p>
                             </div>
                         </div>
                         <div class=\"row mt-3\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p>TTC : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-end\"> " . $formatTotal . "€</p>
                             </div>
                         </div>
                         <div class=\"row\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p class=\"text-muted tvaDetails\">TVA 20% : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatTva . "€</p>
                             </div>
                         </div>
                         <div class=\"row\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p class=\"text-muted tvaDetails\">Soit HT : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatHt . "€</p>
                             </div>
                         </div>
@@ -451,34 +445,34 @@
                 echo "
                         <h5 class=\"text-center mt-2 mb-3\">Récapitulatif</h5>
                         <div class=\"row\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p>Article : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-end\">$totalQuantity</p>
                             </div>
                         </div>
                         <div class=\"row mt-3\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p>TTC : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-end\"> " . $formatTotal . "€</p>
                             </div>
                         </div>
                         <div class=\"row\">
-                            <div class=\"col-3 offset-3\">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p class=\"text-muted tvaDetails\">TVA 20% : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatTva . "€</p>
                             </div>
                         </div>
-                        <div class=\"row\">
-                            <div class=\"col-3 offset-3\">
+                        <div class=\"row \">
+                            <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                                 <p class=\"text-muted tvaDetails\">Soit HT : " . " " . "</p>
                             </div>
-                            <div class=\"col-3\">
+                            <div class=\"col-5 col-sm-3\">
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatHt . "€</p>
                             </div>
                         </div>
@@ -520,7 +514,7 @@
                                     <form action=\"shopping-cart.php\" method=\"post\"> 
                                         <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" size=\"5\" value=\"" . $article["quantity"] . "\">
                                         <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
-                                        <input type=\"submit\" value=\"Modifier\"/>
+                                        <input type=\"submit\" value=\"Modifier\" class=\"button\"/>
                                     </form>
                                 </div>
                             </div>
@@ -566,19 +560,22 @@
                 $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");          
             }
             echo "
+
                     <div class=\"row\">
-                        <div class=\"col-3 offset-3\">
+                        <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                             <p class=\"text-muted\">Frais de port (" . $formatShippingFees . "€/article) : </p>
                         </div>
-                        <div class=\"col-3\">
+                        <div class=\"col-5 col-sm-3\">
                             <p class=\"text-muted text-end\">" . $formatTotalShippingFees . "€</p>
                         </div>
                     </div>
+                    <div class=\"row beforeTotalTTC\">
+                    <h1></h1></div>
                     <div class=\"row\">
-                        <div class=\"col-3 offset-3\">
+                        <div class=\"col-6 offset-sm-2 col-sm-4 offset-md-3 col-md-3\">
                             <p class=\"totalTTC\">TOTAL TTC : </p>
                         </div>
-                        <div class=\"col-3\">
+                        <div class=\"col-6 col-sm-4 col-md-3\">
                             <p class=\"text-end totalTTC\">" . $formatTotalWithShippingFees . "€</p>
                         </div>
                     </div>
@@ -592,7 +589,7 @@
         if ($_SESSION["cart"] > 0) {
             echo "
                 <form action=\"index.php\" method=\"post\">
-                    <input type=\"submit\" name=\"validateAndDeleteAllArticles\" value=\"Valider ma commande\"/>
+                    <input type=\"submit\" name=\"validateAndDeleteAllArticles\" value=\"Valider ma commande\" class=\"buttonLargeImpact\"/>
                 </form>
                  ";
         } 

@@ -39,6 +39,25 @@
     </div>
 </div>
 
+<div class="container routContainer">
+    <div class="row">
+        <div class="col-6 col-md-3 mt-3 text-center">
+            <h6><i class="fas fa-shopping-cart"></i><span>01.</span>Panier</h6>
+        </div>
+        <div class="col-6 col-md-3 text-center">
+            <div class="activePage">
+                <h6><i class="fas fa-check-double"></i><span>02.</span>Validation</h6>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 mt-3 text-center">
+            <h6><i class="fas fa-truck"></i><span>03.</span>Livraison</h6>
+        </div>
+        <div class="col-6 col-md-3 mt-3 text-center">
+            <h6><i class="far fa-credit-card"></i><span>04.</span>Paiement</h6>
+        </div>
+    </div>
+</div>
+
 
 <div class="container mainContainer">
     <div class="row">

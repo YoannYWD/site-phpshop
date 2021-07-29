@@ -1,7 +1,8 @@
 /*
 COLOR
 - White #FFFFFF
-- Marron #502910
+- Jaune #F4C84E
+- Gris #26221C
 
 
 FONTS
@@ -36,14 +37,14 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    
 }
 
 
 h1 {
     font-family: 'Otomanopee One', Arial, Helvetica, sans-serif;
-    color: #FFFFFF;  
+    color: #26221C;  
 }
+
 
 h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', Arial, Helvetica, sans-serif;
@@ -82,6 +83,84 @@ form button:hover {
     transition: 0.5s;
 }
 
+form button i.details {
+    padding: 10px;
+    background-color: #F4C84E;
+    border-radius: 50%;
+    border: 1px solid #26221C;
+}
+
+.buttonLarge {
+    background-color: #F4C84E;
+    padding: 5px 10px;
+    border-radius: 50px;
+    border: 1px solid #26221C;
+    transition: 0.5s;
+}
+.buttonLarge:hover {
+    background-color: #FFFFFF;
+    padding: 5px 30px;
+    transition: 0.5s;
+}
+
+.buttonLargeImpact {
+    background-color: #26221C;
+    color: #F4C84E;
+    border: 1px solid #26221C;
+    padding: 10px 35px;
+    border-radius: 50px;
+    transition: 0.5s;
+}
+.buttonLargeImpact:hover {
+    background-color: #FFFFFF;
+    color: #26221C;
+    padding: 10px 55px;
+    transition: 0.5s;
+}
+
+.button {
+    background-color: #F4C84E;
+    padding: 5px 10px;
+    border-radius: 50px;
+    border: 1px solid #26221C;
+    transition: 0.5s;
+}
+.button:hover {
+    background-color: #FFFFFF;
+    transition: 0.5s;
+}
+
+
+.card {
+    border: 1px solid #26221C!important;
+}
+
+.containerCart a {
+    text-decoration: none;
+}
+
+.routContainer {
+    margin-top: 20px;
+}
+
+.routContainer .activePage {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    padding-top: 13px;
+    padding-bottom: 5px;
+}
+
+.routContainer i {
+    color:#26221c80;
+}
+
+.routContainer span {
+    padding: 0 5px;
+    font-weight: 600;
+    color: #c07600;
+}
+
+
 
 
 /* NAVBAR
@@ -89,7 +168,7 @@ form button:hover {
 
 nav {
     font-family: 'Otomanopee One', Arial, Helvetica, sans-serif;
-    background-color: #502910;
+    background-color: #26221C;
 }
 
 .navbar-brand img {
@@ -117,27 +196,26 @@ nav {
 
 .itemCart {
     background-color: #FFFFFF;
-    color: #502910;
-    padding: 30px;
-    border-radius: 50%;
-    position: relative;
+    color: #26221C;
+    padding: 0 25px 0 25px;
+    border-radius: 5px;
+    border: 1px solid #26221C;
 }
 
 .itemCart i {
-    font-size: 2.5em;
+    font-size: 1.2em;
+    color: #26221cb6;
 }
 
-.itemCartQuantity {
-    color: #FFFFFF;
-    position: absolute;
-    top: 33px;
-    left: 65px;
-}
 
 
 
 /* ADD-TO-CART.PHP
 *****************************************/
+.summaryCard {
+    background-color: #FDF2C3!important;
+}
+
 .summary h5 {
     text-decoration: underline;
 }
@@ -148,8 +226,10 @@ p.text-muted {
 
 p.backToArticles a {
     text-decoration: none;
-    color: #502910;    
+    color: #c07600;    
 }
+
+
 
 
 /* SHOPPING-CART.PHP
@@ -158,11 +238,21 @@ p.backToArticles a {
     font-size: 1.5em!important;
 }
 
+.summary .beforeTotalTTC h1:after{
+    display: block;
+    height: 1px;
+    background-color: #26221C;
+    width: 50vw;
+    content:" ";
+    margin: 0 auto 20px auto;
+    margin-top: 10px;
+}
+
 
 /* FOOTER
 *****************************************/
 footer {
-    background-color: #502910;
+    background-color: #26221C;
 }
 footer h2 {
     color: #FFFFFF;
@@ -174,7 +264,7 @@ footer h2 {
     color: #FFFFFF;
 }
 .contactsContainer h5 {
-    color: #FFFFFF;
+    color: #F4C84E;
     text-decoration: underline;
 }
 .contactsContainer p {
@@ -193,6 +283,7 @@ p.links i {
     transition: 0.5s;
 }
 p.links i:hover {
+    color: #F4C84E;
     transform: scale(1.2);
     transition: 0.5s;
 }
@@ -202,3 +293,29 @@ p.copyright {
     margin-bottom: 20px;
 }
 
+
+
+/* RESPONSIVE MOBILES PAD
+***********************************/
+
+@media screen and (max-width: 575px) {
+    .titlePageContainer {
+        margin-top: 280px;
+    }
+
+    .containerCart {
+        position: fixed;
+        top: 180px;
+    }
+
+    .itemCart {
+        background-color: #FFFFFF;
+        color: #26221C;
+        padding: 0 15px 0 15px;
+        border-radius: 5px;
+        border: 1px solid #26221C;
+    }
+    .summary .beforeTotalTTC h1:after{
+        width: 70vw;
+    }
+}

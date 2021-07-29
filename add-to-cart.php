@@ -20,25 +20,6 @@
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
-<div class="container-fluid containerCart">
-    <div class="row">
-        <div class="col-1 offset-11 text-center">
-            <div class="col-12 itemCart">
-                <p>
-                    <i class="fas fa-shopping-cart"></i>
-                </p>
-                <div class="itemCartQuantity">
-                    <p>
-                        <?php
-                            $totalQuantity=0;
-                            totalQuantity($totalQuantity);
-                        ?>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="container titlePageContainer">
     <div class="row">
@@ -47,6 +28,26 @@
         </div>
     </div>
 </div>
+
+<div class="container routContainer">
+    <div class="row">
+        <div class="col-6 col-md-3 text-center">
+            <div class="activePage">
+                <h6><i class="fas fa-shopping-cart"></i><span>01.</span>Panier</h6>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 mt-3 text-center">
+            <h6><i class="fas fa-check-double"></i><span>02.</span>Validation</h6>
+        </div>
+        <div class="col-6 col-md-3 mt-3 text-center">
+            <h6><i class="fas fa-truck"></i><span>03.</span>Livraison</h6>
+        </div>
+        <div class="col-6 col-md-3 mt-3 text-center">
+            <h6><i class="far fa-credit-card"></i><span>04.</span>Paiement</h6>
+        </div>
+    </div>
+</div>
+
 
 <?php
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
@@ -64,7 +65,9 @@
 
 
 <div class="container mainContainer">
+
     <div class="row">
+        
         <div class="col-12 col-xl-10">
             <?php
             displayCart();
@@ -74,8 +77,8 @@
             ?>
             
         </div>
-        <div class="col-8 offset-2 col-md-4 offset-md-4 col-xl-2 offset-xl-0 summary">
-            <div class="card mb-3 p-2">
+        <div class="col-12 col-md-4 offset-md-4 col-xl-2 offset-xl-0 summary">
+            <div class="card mb-3 p-2 summaryCard">
 
                 <?php
 
@@ -87,14 +90,25 @@
                 // bouton supprimer tous les articles
                 deleteAllBtn();
 
-                // Continuer à faire du shopping
-                continueShopping();
 
-                // bouton valider le panier
-                validateAddToCart();
+
 
                 ?>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 text-center">
+            <?php
+
+            
+                // Continuer à faire du shopping
+                continueShopping();
+                            // bouton valider le panier
+                            validateAddToCart();
+
+            
+            ?>
         </div>
     </div>
 </div>
@@ -115,25 +129,6 @@
     </div>
 </div>
 
-<div class="container-fluid containerCart">
-    <div class="row">
-        <div class="col-1 offset-11 text-center">
-            <div class="col-12 itemCart">
-                <p>
-                    <i class="fas fa-shopping-cart"></i>
-                </p>
-                <div class="itemCartQuantity">
-                    <p>
-                        <?php
-                            $totalQuantity=0;
-                            totalQuantity($totalQuantity);
-                        ?>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- FOOTER
 ------------------------------------------------------------------->

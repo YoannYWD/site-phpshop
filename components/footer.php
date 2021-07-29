@@ -14,7 +14,7 @@
                             <img src="./assets/images/apiculteurs.jpg" class="card-img-top" alt="apiculteurs">
                                 <div class="card-body">
                                     <h5 class="card-title">Des apiculteurs passionnés</h5>
-                                    <p class="card-text">Notre assiociation s'est formée en 2010 dans un but d'entre-aide entre apiculteurs professionnels, passionnés, et débutants.</p>
+                                    <p class="card-text">Notre association s'est formée en 2010 dans un but d'entre-aide entre apiculteurs professionnels, passionnés, et débutants.</p>
                                 </div>
                         </div>
                         <div class="card">
