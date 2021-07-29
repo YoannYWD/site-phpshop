@@ -115,11 +115,10 @@
 <div class="container displayArticles">
     <div class="row">
         <?php
-            if (isset($_POST['id'])) {
-                $id = $_POST['id'];
-                $article = getArticle($id);
-                showMoreArticles($article);
-            }
+
+
+                showMoreArticles();
+
         ?>
     </div>
 </div>

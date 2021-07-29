@@ -23,8 +23,8 @@
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
-    if (isset($_POST['validateAndDeleteAllArticles'])) {
-        validateShoppingCart();
+    if (isset($_POST["validateAndDeleteAllArticles"])) {
+        deleteAllArticles();
     }
 ?>
 
@@ -80,10 +80,32 @@
                 ?>
             </div>
         </div>
+        <!-- MODAL -->
         <div class="col-12 text-center">
-            <?php
-                validateShoppingCart();
-            ?>
+            <input type="submit" name="validateAndDeleteAllArticles" value="Valider ma commande" class="buttonLargeImpact inputModal" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/>
+        </div>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Commande validée !</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <?php
+                        $total = 0;
+                        $totalWithShippingFees = 0;
+                        $totalQuantity=0;
+                        displayModal($total, $totalWithShippingFees, $totalQuantity);
+                    ?>
+                </div>
+                <div class="modal-footer">
+                    <?php
+                        validateShoppingCart();
+                    ?>
+                </div>
+                </div>
+            </div>
         </div>
         <div class="col-12">
             <?php
@@ -93,6 +115,12 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+<!-- Modal -->
 
 
 <!-- FOOTER

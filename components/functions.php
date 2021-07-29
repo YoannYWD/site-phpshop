@@ -23,7 +23,8 @@ INDEX
 - AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION
 - AFFICHER LE PANIER DANS LA PAGE SHOPPING-CART.PHP
 - PRIX AVEC FRAIS DE PORT
-- BOUTON VALIDER LA COMMANDE
+- AFFICHAGE MODAL
+- BOUTON RETOUR PAGE ACCUEIL
 
 **************************************************************/
 
@@ -416,17 +417,19 @@ INDEX
                     </div>
                  ";   
         }
-
     }
 
+
     // AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
-    function showMoreArticles($article) {
+    function showMoreArticles() {
+        $articles = getArticles();
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++){
-                    if ($_SESSION["cart"][$i]["id"] == $article["id"] && !in_array($article["id"], $_SESSION["cart"][$i])) {
+                foreach($articles as $article) {
+                    if ($_SESSION["cart"][$i]["id"] !== $article["id"] && !in_array($article["id"], $_SESSION["cart"][$i])) {
                         $priceFormat = number_format($article["price"], 2, ",", " ");
-                        echo "
-                                <div class=\"col-12 col-lg-4 text-center mb-3\">
+                        echo " 
+                                <div class=\"col-12 col-lg-4 text-center mb-5\">
                                     <div class=\"card\">
                                         <img src=\"" . $article["img"] . "\" class=\"card-img-top\" alt=\"image produit\">
                                         <div class=\"card-body\">
@@ -448,10 +451,10 @@ INDEX
                             ";     
                     } 
                 }
+            }
             
         }
     }
-
 
 
     // AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION
@@ -622,7 +625,6 @@ INDEX
                 $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");          
             }
             echo "
-
                     <div class=\"row\">
                         <div class=\"offset-1 col-5 offset-sm-3 col-sm-3\">
                             <p class=\"text-muted\">Frais de port (" . $formatShippingFees . "€/article) : </p>
@@ -645,13 +647,40 @@ INDEX
         }
     }
 
+    // AFFICHAGE MODAL
+    function displayModal($total, $totalWithShippingFees, $totalQuantity) {
+        if(count($_SESSION["cart"]) > 0) {
+            for($i = 0; $i < count($_SESSION["cart"]); $i++) {
+                $shippingFees = 0.9;
+                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
+                $totalShippingFees = $totalQuantity * $shippingFees;
+                $totalWithShippingFees = $total + $totalShippingFees;     
+                $formatShippingFees = number_format($shippingFees, 2, ",", " "); 
+                $formatTotalShippingFees = number_format($totalShippingFees, 2, ",", " ");
+                $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");
+ 
+                setlocale(LC_TIME, "fr_FR", "French");
+                $expedition = utf8_encode(date('Y-m-d', strtotime("+2 days")));
+                $delivery = date('Y-m-d', strtotime("+6 days"));
+        
+            }
+            echo "
+                    <p class=\"text-center mb-4 totalTTC\">Montant payé : " . $formatTotalWithShippingFees . "€</p>
+                    <p class=\"text-center \">Expédition prévue le : " . utf8_encode(strftime("%A %d %B %G", strtotime($expedition))) . "</p>
+                    <p class=\"text-center mb-4\">Livraison estimée le : " . utf8_encode(strftime("%A %d %B %G", strtotime($delivery))) . "</p>
+                    <h5 class=\"text-center\">Merci pour votre confiance !</h5>
+                 ";
+        }
+    }
 
-    // BOUTON VALIDER LA COMMANDE
+
+    // BOUTON RETOUR PAGE ACCUEIL
     function validateShoppingCart() {
         if ($_SESSION["cart"] > 0) {
             echo "
                 <form action=\"index.php\" method=\"post\">
-                    <input type=\"submit\" name=\"validateAndDeleteAllArticles\" value=\"Valider ma commande\" class=\"buttonLargeImpact\"/>
+                    <input type=\"submit\" name=\"validateAndDeleteAllArticles\" value=\"Retour à la page d'accueil\" class=\"buttonLargeImpact\"/>
                 </form>
                  ";
         } 

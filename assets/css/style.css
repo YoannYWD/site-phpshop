@@ -3,6 +3,8 @@ COLOR
 - White #FFFFFF
 - Jaune #F4C84E
 - Gris #26221C
+- Orange #c07600
+- jaune pale #FEF8D7
 
 
 FONTS
@@ -52,7 +54,6 @@ h2, h3, h4, h5, h6 {
 
 p {
     font-family: 'Oswald', Arial, Helvetica, sans-serif;
- 
 }
 
 p span {
@@ -66,11 +67,11 @@ p span {
     margin-top: 200px;
 }
 
+
 form input {
     margin-bottom: 10px;
     font-family: 'Oswald', Arial, Helvetica, sans-serif;
 }
-
 form button {
     margin-bottom: 10px;
     background-color: transparent;
@@ -162,7 +163,6 @@ form button i.details {
 
 
 
-
 /* NAVBAR
 *****************************************/
 
@@ -213,7 +213,7 @@ nav {
 /* ADD-TO-CART.PHP
 *****************************************/
 .summaryCard {
-    background-color: #FDF2C3!important;
+    background-color: #FEF8D7!important;
 }
 
 .summary h5 {
@@ -234,6 +234,10 @@ p.backToArticles a {
 
 /* SHOPPING-CART.PHP
 *****************************************/
+.summary .card {
+    background-color: #FEF8D7;
+}
+
 .summary .totalTTC {
     font-size: 1.5em!important;
 }
@@ -247,6 +251,12 @@ p.backToArticles a {
     margin: 0 auto 20px auto;
     margin-top: 10px;
 }
+
+input.inputModal {
+    font-family: 'Oswald', Arial, Helvetica, sans-serif!important;
+    margin-bottom: 30px!important;
+}
+
 
 
 /* FOOTER
