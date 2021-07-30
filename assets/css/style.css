@@ -26,7 +26,8 @@ FONTS
 3- INDEX.PHP
 4- ADD-TO-CART.PHP
 5- SHOPPING-CART.PHP
-6- FOOTER
+6- DELIVERY.PHP
+7- FOOTER
 
 */
 
@@ -183,6 +184,13 @@ nav {
     top: 6px;
 }
 
+.navbar-nav a {
+    color: #FFFFFF!important;
+}
+.navbar-nav a:hover {
+    color: #F4C84E!important;
+}
+
 
 
 
@@ -192,6 +200,7 @@ nav {
 .containerCart {
     position: fixed;
     top: 155px;
+    z-index: 1;
 }
 
 .itemCart {
@@ -257,6 +266,20 @@ input.inputModal {
     margin-bottom: 30px!important;
 }
 
+
+/* DELIVERY.PHP
+*****************************************/
+.modal-body {
+    background-image: linear-gradient(#26221c9d, #26221c9d),url(../images/bee3.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #FFFFFF;
+}
+
+.modal-body h5 {
+    color : #F4C84E;
+}
 
 
 /* FOOTER

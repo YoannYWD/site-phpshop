@@ -23,18 +23,16 @@
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
-    if (isset($_POST["validateAndDeleteAllArticles"])) {
-        deleteAllArticles();
-    }
+
 ?>
 
 
-<!-- AFFICHAGE DU OU DES PRODUITS
+<!-- AFFICHAGE PAGE
 ------------------------------------------------------------------->
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">
-            <h1>Valider votre commande</h1>
+            <h1>Validation de votre commande</h1>
         </div>
     </div>
 </div>
@@ -58,7 +56,6 @@
     </div>
 </div>
 
-
 <div class="container mainContainer">
     <div class="row">
         <div class="col-12 summary">
@@ -80,34 +77,21 @@
                 ?>
             </div>
         </div>
-        <!-- MODAL -->
-        <div class="col-12 text-center">
-            <input type="submit" name="validateAndDeleteAllArticles" value="Valider ma commande" class="buttonLargeImpact inputModal" data-bs-toggle="modal" data-bs-target="#staticBackdrop"/>
-        </div>
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Commande validée !</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+        <div class="col-12 mb-5 text-center">
+            <!-- <form action="delivery.php" method="post">
                     <?php
-                        $total = 0;
-                        $totalWithShippingFees = 0;
-                        $totalQuantity=0;
-                        displayModal($total, $totalWithShippingFees, $totalQuantity);
+
+                        $deliveryValues = [10, 5];
+                        displayDelivery($deliveryValues); 
+
                     ?>
-                </div>
-                <div class="modal-footer">
-                    <?php
-                        validateShoppingCart();
-                    ?>
-                </div>
-                </div>
-            </div>
+            </form> -->
+            <?php
+                goToDelivery();
+            ?>
         </div>
         <div class="col-12">
+            
             <?php
                 displayFinalCart();
                 backToArticles();
@@ -116,16 +100,9 @@
     </div>
 </div>
 
-
-
-
-
-<!-- Modal -->
-
-
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-require './components/footer.php';
+    require './components/footer.php';
 ?>
 

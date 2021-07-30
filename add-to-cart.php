@@ -10,17 +10,14 @@
         $_SESSION['cart'] = [];
     }
 
-
     if (isset($_POST['deleteAllArticles'])) {
         deleteAllArticles();
     }
-
 ?>
 
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
-
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">
@@ -48,7 +45,6 @@
     </div>
 </div>
 
-
 <?php
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
@@ -63,11 +59,8 @@
     }
 ?>
 
-
 <div class="container mainContainer">
-
-    <div class="row">
-        
+    <div class="row">      
         <div class="col-12 col-xl-10">
             <?php
                 displayCart();
@@ -77,16 +70,14 @@
             ?>      
         </div>
         <div class="col-12 col-md-4 offset-md-4 col-xl-2 offset-xl-0 summary">
-            <div class="card mb-3 p-2 summaryCard">
-
                 <?php
-                // calcul du prix final et de la quantité totale d'article
-                $total=0;
-                $totalQuantity=0;
-                totalPrice($total, $totalQuantity);
+                    // calcul du prix final et de la quantité totale d'article
+                    $total=0;
+                    $totalQuantity=0;
+                    totalPrice($total, $totalQuantity);
 
-                // bouton supprimer tous les articles
-                deleteAllBtn();
+                    // bouton supprimer tous les articles
+                    deleteAllBtn();
                 ?>
             </div>
         </div>
@@ -105,20 +96,15 @@
 </div>
 
 <div class="container mainContainer">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1>Les clients qui ont acheté ceci ont également acheté</h1>
-        </div>
-    </div>
+    <?php
+        showMoreArticlesTitle();
+    ?>
 </div>
 
 <div class="container displayArticles">
     <div class="row">
         <?php
-
-
-                showMoreArticles();
-
+            showMoreArticles();
         ?>
     </div>
 </div>
@@ -127,6 +113,6 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-require './components/footer.php';
+    require './components/footer.php';
 ?>
 

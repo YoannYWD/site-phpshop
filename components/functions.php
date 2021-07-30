@@ -19,11 +19,14 @@ INDEX
 - AFFICHAGE PHRASE RETOUR PAGE ARTICLES
 - AFFICHAGE BOUTON CONTINUER MES ACHATS
 - AFFICHAGE BOUTON VALIDATION DE PANIER
+- AFFICHAGE TITRE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
 - AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
 - AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION
 - AFFICHER LE PANIER DANS LA PAGE SHOPPING-CART.PHP
 - PRIX AVEC FRAIS DE PORT
 - AFFICHAGE MODAL
+- BOUTON PASSER A LA LIVRAISON
+- PRIX AVEC FRAIS DE LIVRAISON
 - BOUTON RETOUR PAGE ACCUEIL
 
 **************************************************************/
@@ -70,7 +73,7 @@ INDEX
         foreach($articles as $article) {
             $priceFormat = number_format($article['price'], 2, ",", " ");
             echo "
-                <div class=\"col-12 col-lg-4 text-center mb-3\">
+                <div class=\"col-12 col-sm-6 col-lg-4 text-center mb-3\">
                     <div class=\"card\">
                         <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
                         <div class=\"card-body\">
@@ -93,8 +96,6 @@ INDEX
                  ";
         }
     }
-
-
 
 
     // AFFICHER UN PRODUIT DANS LA PAGE PRODUCT.PHP
@@ -243,9 +244,10 @@ INDEX
                         <div class=\"col-12 text-center\">
                             <form action=\"add-to-cart.php\" method=\"post\">
                                 <input type=\"hidden\" name=\"deleteAllArticles\"/>
-                                <button type=\"submit\"><i class=\"fas fa-trash-alt\"></i></button>
+                                <a href=\"/phpshop/add-to-cart\"><button type=\"submit\"><i class=\"fas fa-trash-alt\"></i></button></a>
                             </form>
                         </div>
+                    </div>
                 </div>
                  ";           
         }
@@ -272,6 +274,7 @@ INDEX
             }
             if ($totalQuantity > 1) {
                 echo " 
+                    <div class=\"card mb-3 p-2 summaryCard\">
                         <h5 class=\"text-center mt-2 mb-3\">Récapitulatif</h5>
                         <div class=\"row\">
                             <div class=\"col-6\">
@@ -305,10 +308,11 @@ INDEX
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatHt . "€</p>
                             </div>
                         </div>
-    
+                
                      ";
             } else {
                 echo "
+                    <div class=\"card mb-3 p-2 summaryCard\">
                         <h5 class=\"text-center mt-2 mb-3\">Récapitulatif</h5>
                         <div class=\"row\">
                             <div class=\"col-6\">
@@ -342,7 +346,7 @@ INDEX
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatHt . "€</p>
                             </div>
                         </div>
-
+             
                      ";
             }
 
@@ -420,6 +424,19 @@ INDEX
     }
 
 
+    // AFFICHAGE TITRE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
+    function showMoreArticlesTitle() {        
+        if(count($_SESSION["cart"]) > 0) {
+            echo "
+                    <div class=\"row\">
+                        <div class=\"col-12 text-center\">
+                            <h1>Les clients qui ont acheté ceci ont également acheté</h1>
+                        </div>
+                    </div>               
+                 ";
+        }       
+    }
+
     // AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
     function showMoreArticles() {
         $articles = getArticles();
@@ -429,7 +446,7 @@ INDEX
                     if ($_SESSION["cart"][$i]["id"] !== $article["id"] && !in_array($article["id"], $_SESSION["cart"][$i])) {
                         $priceFormat = number_format($article["price"], 2, ",", " ");
                         echo " 
-                                <div class=\"col-12 col-lg-4 text-center mb-5\">
+                                <div class=\"col-12 col-sm-6 col-lg-4 text-center mb-5\">
                                     <div class=\"card\">
                                         <img src=\"" . $article["img"] . "\" class=\"card-img-top\" alt=\"image produit\">
                                         <div class=\"card-body\">
@@ -666,13 +683,63 @@ INDEX
         
             }
             echo "
-                    <p class=\"text-center mb-4 totalTTC\">Montant payé : " . $formatTotalWithShippingFees . "€</p>
+                    <h5 class=\"text-center mb-4 totalTTC\">Montant payé : " . $formatTotalWithShippingFees . "€</h5>
                     <p class=\"text-center \">Expédition prévue le : " . utf8_encode(strftime("%A %d %B %G", strtotime($expedition))) . "</p>
                     <p class=\"text-center mb-4\">Livraison estimée le : " . utf8_encode(strftime("%A %d %B %G", strtotime($delivery))) . "</p>
                     <h5 class=\"text-center\">Merci pour votre confiance !</h5>
                  ";
         }
     }
+
+
+    // BOUTON PASSER A LA LIVRAISON
+    function goToDelivery() {
+        if ($_SESSION["cart"] > 0) {
+            echo "
+                <form action=\"delivery.php\" method=\"post\">
+                    <input type=\"submit\" value=\"Choisir la livraison\" class=\"buttonLargeImpact\"/>
+                </form>
+                 ";
+        } 
+    }
+
+
+    // PRIX AVEC FRAIS DE LIVRAISON
+    function priceWithDelivery($total, $totalWithShippingFees, $totalQuantity, $deliveryValue) {
+        if(count($_SESSION["cart"]) > 0) {
+            for($i = 0; $i < count($_SESSION["cart"]); $i++) {
+                $shippingFees = 0.9;
+                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
+                $totalShippingFees = $totalQuantity * $shippingFees;
+                $totalWithShippingFees = $total + $totalShippingFees;     
+                $formatShippingFees = number_format($shippingFees, 2, ",", " "); 
+                $formatTotalShippingFees = number_format($totalShippingFees, 2, ",", " ");
+                $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");
+                $totalWithDelivery = $totalWithShippingFees + intval($deliveryValue);
+                $formatTotalWithDelivery = number_format($totalWithDelivery, 2, ",", " ");          
+            }
+            echo "
+                    <h5 class=\"text-center mt-2 mb-3\">Livraison</h5>
+                    <div class=\"row\">
+                        <div class=\"col-12\">
+                            <p class=\"text-center\">Vous avez choisi la livraison " . ".</p>
+                        </div>
+                    </div>
+                    <div class=\"row beforeTotalTTC\">
+                    <h1></h1></div>
+                    <div class=\"row\">
+                        <div class=\"col-6 offset-sm-2 col-sm-4 offset-md-3 col-md-3\">
+                            <p class=\"totalTTC\">TOTAL avec livraison : </p>
+                        </div>
+                        <div class=\"col-6 col-sm-4 col-md-3\">
+                            <p class=\"text-end totalTTC\">" . $formatTotalWithDelivery . "€</p>
+                        </div>
+                    </div>
+                 ";
+        }
+    }
+
 
 
     // BOUTON RETOUR PAGE ACCUEIL
@@ -686,5 +753,23 @@ INDEX
         } 
     }
 
+
+    // function delivery() {
+    //     if (isset($_POST['delivery']) && ($_POST['delivery'] == $deliveryValue)) {
+    //         $ending = "checked";
+    //         return $ending;
+    //     }
+    //     else{
+    //         $ending = "";
+    //         return $ending;
+    //     }
+    // }
+
+    // function displayDelivery($deliveryValues) {
+    //     foreach($deliveryValues as $deliveryValue){
+    //         echo "<label class=\"radio\" for=" . $deliveryValue . ">" . $deliveryValue . ",00€</label>
+    //                 <input type=\"radio\" name=\"delivery\" value=\"" . $deliveryValue . "\" " . delivery($deliveryValue) . "/>";
+    //     }
+    // }
 
 ?>

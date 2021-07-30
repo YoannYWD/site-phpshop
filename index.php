@@ -17,7 +17,7 @@
 <!-- HEADER 
 ------------------------------------------------------------------->
 <?php
-require './components/header.php';
+    require './components/header.php';
 ?>
 
 <div class="container titlePageContainer">
@@ -38,7 +38,6 @@ require './components/header.php';
         ?>
     </div>
 </div>
-
 
 <div class="container-fluid containerCart">
     <div class="row">
@@ -63,5 +62,5 @@ require './components/header.php';
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-require './components/footer.php';
+    require './components/footer.php';
 ?>
