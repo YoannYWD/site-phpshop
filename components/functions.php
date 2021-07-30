@@ -73,26 +73,25 @@ INDEX
         foreach($articles as $article) {
             $priceFormat = number_format($article['price'], 2, ",", " ");
             echo "
-                <div class=\"col-12 col-sm-6 col-lg-4 text-center mb-3\">
-                    <div class=\"card\">
-                        <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
-                        <div class=\"card-body\">
-                            <h5 class=\"card-title\">" . $article['name'] . "</h5>
-                            <p class=\"card-text\"><span>" . $article['specPrice'] . "</span>" . " " . $priceFormat . "€</p>
-                            <form action=\"product.php\" method=\"post\">
-                                <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
-                                <input type=\"submit\" value=\"En détails\" class=\"buttonLarge\"/>
-                            </form>
-                            <form action=\"add-to-cart.php\" method=\"post\">
-                                <input type=\"hidden\" name=\"name\" value=\"" . $article['name'] . "\" />
-                                <input type=\"hidden\" name=\"price\" value=\"" . $article['price'] . "\" />
-                                <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
-                                <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
-                            </form>
+                    <div class=\"col-12 col-sm-6 col-lg-4 text-center mb-3\">
+                        <div class=\"card\">
+                            <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
+                            <div class=\"card-body\">
+                                <h5 class=\"card-title\">" . $article['name'] . "</h5>
+                                <p class=\"card-text\"><span>" . $article['specPrice'] . "</span>" . " " . $priceFormat . "€</p>
+                                <form action=\"product.php\" method=\"post\">
+                                    <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                    <input type=\"submit\" value=\"En détails\" class=\"buttonLarge\"/>
+                                </form>
+                                <form action=\"add-to-cart.php\" method=\"post\">
+                                    <input type=\"hidden\" name=\"name\" value=\"" . $article['name'] . "\" />
+                                    <input type=\"hidden\" name=\"price\" value=\"" . $article['price'] . "\" />
+                                    <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                    <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            
+                    </div>        
                  ";
         }
     }
@@ -101,7 +100,8 @@ INDEX
     // AFFICHER UN PRODUIT DANS LA PAGE PRODUCT.PHP
     function showArticle($article) {
         $priceFormat = number_format($article['price'], 2, ",", " ");
-        echo "<div class=\"card mb-3 text-center\">
+        echo "
+               <div class=\"card mb-3 text-center\">
                 <img src=\"" . $article['img'] . "\" class=\"card-img-top mx-auto\" alt=\"image produit\" style=\"max-width: 540px;\">
                 <div class=\"card-body\">
                     <h5 class=\"card-title\">" . $article['name'] . "</h5>
@@ -235,7 +235,25 @@ INDEX
         }
     }
 
+    // AFFICHAGE BOUTON SUPPRIMER TOUS LES PRODUITS PAGE VALIDATION
+    function deleteAllBtnSc() {
+        if(count($_SESSION["cart"]) > 0) {
+            echo "
+                    <div class=\"row\">
+                        <div class=\"col-12 text-center\">
+                            <form action=\"add-to-cart.php\" method=\"post\">
+                                <input type=\"hidden\" name=\"deleteAllArticles\"/>
+                                <a href=\"/phpshop/add-to-cart\"><button type=\"submit\"><i class=\"fas fa-trash-alt\"></i></button></a>
+                            </form>
+                        </div>
+                    </div>
+
+                    ";           
+        }
+    }
     
+
+
     // AFFICHAGE BOUTON SUPPRIMER TOUS LES PRODUITS
     function deleteAllBtn() {
         if(count($_SESSION["cart"]) > 0) {
@@ -345,8 +363,7 @@ INDEX
                             <div class=\"col-6\">
                                 <p class=\"text-muted text-end tvaDetails\"> " . $formatHt . "€</p>
                             </div>
-                        </div>
-             
+                        </div>            
                      ";
             }
 
@@ -375,7 +392,6 @@ INDEX
                 echo "<div class=\"col-12 text-center\">
                         <p>La quantité a été modifiée.</p>
                       </div>";
-
             } 
         }
     }
@@ -384,7 +400,6 @@ INDEX
     // AFFICHAGE PHRASE RETOUR PAGE ARTICLES
     function backToArticles() {
         if(count($_SESSION["cart"]) < 1) {
-
             echo "<div class=\"col-12 text-center\">
                     <p class=\"backToArticles\">Cliquez <a href=\"index.php\">ici</a> pour continuer vos achats.</p>
                   </div>";

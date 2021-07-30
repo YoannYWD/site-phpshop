@@ -73,17 +73,15 @@
                 priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
 
                 // bouton supprimer tous les articles
-                deleteAllBtn();
+                deleteAllBtnSc();
                 ?>
             </div>
         </div>
         <div class="col-12 mb-5 text-center">
             <!-- <form action="delivery.php" method="post">
                     <?php
-
-                        $deliveryValues = [10, 5];
-                        displayDelivery($deliveryValues); 
-
+                        //$deliveryValues = [10, 5];
+                        //displayDelivery($deliveryValues); 
                     ?>
             </form> -->
             <?php
