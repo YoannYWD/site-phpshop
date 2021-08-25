@@ -23,12 +23,24 @@
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
         changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
     }
+    if(!isset($_SESSION['nom'])){ //if login in session is not set
+        header("Location: index.php");
+    }
 
 ?>
 
 
 <!-- AFFICHAGE PAGE
 ------------------------------------------------------------------->
+<?php
+    if (isset($_SESSION["prenom"]) && $_SESSION["nom"]){
+        echo "<div class=\"connection\">
+                <p>Vous êtes connecté en tant que " . $_SESSION["prenom"] . " " . $_SESSION["nom"] . ".<p>
+                <input type=\"submit\" class=\"buttonLarge\" name=\"reg_user\" value=\"Se déconnecter\">
+              </div>";
+    }
+?>
+
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">

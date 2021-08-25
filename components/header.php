@@ -31,11 +31,12 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/phpshop"><img src="./assets/images/bee.jpg" alt="logo" width="100px"><span>Happy Culture</span></a>
+                <a class="navbar-brand" href="/site-phpshop"><img src="./assets/images/bee.jpg" alt="logo" width="100px"><span>Happy Culture</span></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+<<<<<<< Updated upstream
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/phpshop">Accueil</a>
@@ -44,6 +45,51 @@
                     <a class="nav-link" href="/phpshop/add-to-cart">Panier</a>
                     </li>
                 </ul>
+=======
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/site-phpshop">Accueil</a>
+                        </li>
+
+                        <?php
+                            if (!isset($_SESSION["prenom"]) && !isset($_SESSION["nom"])){
+                                echo "<li class=\"nav-item\">
+                                        <a class=\"nav-link\" href=\"/site-phpshop/register.php\">Inscription</a>
+                                      </li>
+                                      <li class=\"nav-item\">
+                                        <a class=\"nav-link\" href=\"/site-phpshop/login.php\">Se connecter</a>
+                                      </li>";
+                            }   
+
+                            if (isset($_SESSION["prenom"]) && isset($_SESSION["nom"])){
+                                echo "<li class=\"nav-item\">
+                                        <a class=\"nav-link\" href=\"/site-phpshop/add-to-cart.php\">Panier</a>
+                                      </li>
+                                      <li class=\"nav-item\">
+                                        <a class=\"nav-link\" href=\"/site-phpshop/ranges.php\">Nos gammes de produits</a>
+                                      </li>
+                                      <li class=\"nav-item\">
+                                        <a class=\"nav-link\" href=\"/site-phpshop/profile.php\">Mon profil</a>
+                                      </li>";
+                            }
+                        ?>
+
+                    </ul>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <?php
+                            if (isset($_SESSION["prenom"]) && isset($_SESSION["nom"])){
+                                echo "<li class=\"nav-item me-2\">
+                                        <p class=\"connection text-center\">" . $_SESSION["prenom"] . " " . $_SESSION["nom"] . "<p>
+                                        <form action=\"index.php\" method=\"post\">
+                                            <input type=\"submit\" class=\"buttonLarge\" name=\"log_out\" value=\"Se déconnecter\">
+                                        </form>
+                                    </li>";
+                            }
+                        ?>
+                    </ul>
+>>>>>>> Stashed changes
                 </div>
             </div>
         </nav>

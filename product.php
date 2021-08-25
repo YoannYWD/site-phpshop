@@ -6,6 +6,14 @@
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
+    if(!isset($_SESSION['nom'])){ //if login in session is not set
+        header("Location: index.php");
+        echo "<div class=\"col-12 text-center\">
+                <p>Connectez-vous pour voir les produits en détails.</p>
+              </div>
+              <script type='text/javascript'>alert(Connectez-vous pour voir les produits en détails.);</script>";
+    }
+
 ?>
 
 <!-- IMPORT FUNCTIONS
@@ -56,11 +64,7 @@
         <?php
             //ID, paramètre de la fonction getArticle($id) dans functions.php
             $id = $_POST['id'];
-
-            //PRODUCT, paramètre de la fonction showArticle($product) dans functions.php
-            $article = getArticle($id);
-
-            showArticle($article);
+            showArticle($connection, $id)
         ?>
     </div>
     <div class="row text-center">

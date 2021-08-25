@@ -13,11 +13,15 @@
     if (isset($_POST['deleteAllArticles'])) {
         deleteAllArticles();
     }
+    if(!isset($_SESSION['nom'])){ //if login in session is not set
+        header("Location: index.php");
+    }
 ?>
 
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">
@@ -54,7 +58,7 @@
     }
     if (isset($_POST['id'])) {
         $id = $_POST['id']; //ID, paramètre de la fonction getArticle($id) dans functions.php
-        $article = getArticle($id); //ARTICLE, paramètre de la fonction showArticle($article) dans functions.php
+        $article = getArticle($id, $connection); //ARTICLE, paramètre de la fonction showArticle($article) dans functions.php
         addToCart($article);
     }
 ?>
@@ -63,7 +67,7 @@
     <div class="row">      
         <div class="col-12 col-xl-10">
             <?php
-                displayCart();
+                displayCart($totalPrice);
 
                 // Si panier vide, phrase retour page articles
                 backToArticles();
@@ -72,9 +76,7 @@
         <div class="col-12 col-md-4 offset-md-4 col-xl-2 offset-xl-0 summary">
                 <?php
                     // calcul du prix final et de la quantité totale d'article
-                    $total=0;
-                    $totalQuantity=0;
-                    totalPrice($total, $totalQuantity);
+                    totalPrice($total, $totalQuantity, $totalPrice);
 
                     // bouton supprimer tous les articles
                     deleteAllBtn();
@@ -92,20 +94,6 @@
                 validateAddToCart();            
             ?>
         </div>
-    </div>
-</div>
-
-<div class="container mainContainer">
-    <?php
-        showMoreArticlesTitle();
-    ?>
-</div>
-
-<div class="container displayArticles">
-    <div class="row">
-        <?php
-            showMoreArticles();
-        ?>
     </div>
 </div>
 

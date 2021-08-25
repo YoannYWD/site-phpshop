@@ -26,11 +26,23 @@
     if (isset($_POST["validateAndDeleteAllArticles"])) {
         deleteAllArticles();
     }
+    if(!isset($_SESSION['nom'])){ //if login in session is not set
+        header("Location: index.php");
+    }
 ?>
 
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
+<?php
+    if (isset($_SESSION["prenom"]) && $_SESSION["nom"]){
+        echo "<div class=\"connection\">
+                <p>Vous êtes connecté en tant que " . $_SESSION["prenom"] . " " . $_SESSION["nom"] . ".<p>
+                <input type=\"submit\" class=\"buttonLarge\" name=\"reg_user\" value=\"Se déconnecter\">
+              </div>";
+    }
+?>
+
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">

@@ -12,6 +12,13 @@
     if (isset($_POST["validateAndDeleteAllArticles"])) {
         deleteAllArticles();
     }
+    if (isset($_POST["log_out"])) {
+        unset($_SESSION["nom"]);
+        unset($_SESSION["prenom"]);
+        unset($_SESSION["idd"]);
+        header("Location:index.php");
+    }
+
 ?>
 
 <!-- HEADER 
@@ -28,13 +35,12 @@
     </div>
 </div>
 
-
 <!-- DISPLAY ARTICLES
 ------------------------------------------------------------------->
 <div class="container mainContainer">
     <div class="row">
         <?php
-            showArticles();
+            showArticles($connection);
         ?>
     </div>
 </div>
@@ -57,6 +63,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- FOOTER

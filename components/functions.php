@@ -1,4 +1,5 @@
-<?php
+<?php 
+require "./db.php";
 
 /* 
 INDEX 
@@ -19,8 +20,6 @@ INDEX
 - AFFICHAGE PHRASE RETOUR PAGE ARTICLES
 - AFFICHAGE BOUTON CONTINUER MES ACHATS
 - AFFICHAGE BOUTON VALIDATION DE PANIER
-- AFFICHAGE TITRE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
-- AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
 - AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION
 - AFFICHER LE PANIER DANS LA PAGE SHOPPING-CART.PHP
 - PRIX AVEC FRAIS DE PORT
@@ -33,7 +32,7 @@ INDEX
 
 
     // CREATION D'UN TABLEAU REGROUPANT LES PRODUITS
-    function getArticles() {
+    /*function getArticles() {
         $article1 = [
             "id" => 1,
             "img" => "./assets/images/leve-cadre.jpg",
@@ -64,29 +63,33 @@ INDEX
         $articles = [];
         array_push($articles, $article1, $article2, $article3);
         return $articles;
-    }
+    }*/
 
 
     // AFFICHAGE DE L'ENSEMBLE DES PRODUITS
-    function showArticles() {
-        $articles = getArticles();
+    function showArticles($connection) {
+        $sql = "SELECT * FROM articles;";
+        $statement = $connection->prepare($sql); // statement en instance de connexion = récupère toutes ses fonctionnalités
+        $statement->execute();
+        $articles = $statement->fetchAll(PDO::FETCH_ASSOC); // méthode fetchAll pour renvoyer les données sous format objet
         foreach($articles as $article) {
-            $priceFormat = number_format($article['price'], 2, ",", " ");
+            $priceFormat = number_format($article["prix"], 2, ",", " ");
             echo "
                     <div class=\"col-12 col-sm-6 col-lg-4 text-center mb-3\">
                         <div class=\"card\">
-                            <img src=\"" . $article['img'] . "\" class=\"card-img-top\" alt=\"image produit\">
+                            <img src=\"" . $article["image"] . "\" class=\"card-img-top\" alt=\"image produit\">
                             <div class=\"card-body\">
-                                <h5 class=\"card-title\">" . $article['name'] . "</h5>
-                                <p class=\"card-text\"><span>" . $article['specPrice'] . "</span>" . " " . $priceFormat . "€</p>
+                                <h5 class=\"card-title\">" . $article["nom"] . "</h5>
+                                <p class=\"card-text\">" . " " . $priceFormat . "€</p>
+                                <p class=\"card-text text-muted\">En stock : " . " " . $article["stock"] . "</p>
                                 <form action=\"product.php\" method=\"post\">
-                                    <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                    <input type=\"hidden\" name=\"id\" value=\"" . $article["id"] . "\" />
                                     <input type=\"submit\" value=\"En détails\" class=\"buttonLarge\"/>
                                 </form>
                                 <form action=\"add-to-cart.php\" method=\"post\">
-                                    <input type=\"hidden\" name=\"name\" value=\"" . $article['name'] . "\" />
-                                    <input type=\"hidden\" name=\"price\" value=\"" . $article['price'] . "\" />
-                                    <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                                    <input type=\"hidden\" name=\"name\" value=\"" . $article["nom"] . "\" />
+                                    <input type=\"hidden\" name=\"price\" value=\"" . $article["prix"] . "\" />
+                                    <input type=\"hidden\" name=\"id\" value=\"" . $article["id"] . "\" />
                                     <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
                                 </form>
                             </div>
@@ -98,17 +101,22 @@ INDEX
 
 
     // AFFICHER UN PRODUIT DANS LA PAGE PRODUCT.PHP
-    function showArticle($article) {
-        $priceFormat = number_format($article['price'], 2, ",", " ");
+    function showArticle($connection, $id) {
+        $sql = "SELECT * FROM articles WHERE id = " . $id . ";";
+        $statement = $connection->prepare($sql);
+        $statement->execute();
+        $article = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $priceFormat = number_format($article[0]["prix"], 2, ",", " ");
         echo "
                <div class=\"card mb-3 text-center\">
-                <img src=\"" . $article['img'] . "\" class=\"card-img-top mx-auto\" alt=\"image produit\" style=\"max-width: 540px;\">
+                <img src=\"" . $article[0]["image"] . "\" class=\"card-img-top mx-auto\" alt=\"image produit\" style=\"max-width: 540px;\">
                 <div class=\"card-body\">
-                    <h5 class=\"card-title\">" . $article['name'] . "</h5>
-                    <p class=\"card-text\">" . $article['desc'] . "</p>
-                    <p class=\"card-text\"><small class=\"text-muted\"><span>" . $article['specPrice'] . "</span>" . " " . $priceFormat . "€</small></p>
+                    <h5 class=\"card-title\">" . $article[0]["nom"] . "</h5>
+                    <p class=\"card-text\">" . $article[0]["description"] . "</p>
+                    <p class=\"card-text\"><cite>" . $article[0]["description_detaillee"] . "</cite></p>
+                    <p class=\"card-text\"><small class=\"text-muted\">" . $priceFormat . "€</small></p>
                     <form action=\"add-to-cart.php\" method=\"post\"> 
-                       <input type=\"hidden\" name=\"id\" value=\"" . $article['id'] . "\" />
+                       <input type=\"hidden\" name=\"id\" value=\"" . $article[0]["id"] . "\" />
                        <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
                     </form>
                 </div>
@@ -133,10 +141,13 @@ INDEX
 
 
     // RECUPERER UN PRODUIT CLIQUÉ POUR AJOUT AU PANIER
-    function getArticle($id) {
-        $articles = getArticles();
+    function getArticle($id, $connection) {
+        $sql = "SELECT * FROM articles;";
+        $statement = $connection->prepare($sql);
+        $statement->execute();
+        $articles = $statement->fetchAll(PDO::FETCH_ASSOC);
         foreach($articles as $article) {
-            if ($id == $article['id']) {
+            if ($id == $article["id"]) {
                 return $article;
             }
         }
@@ -145,14 +156,16 @@ INDEX
 
     // AJOUTER LE PRODUIT DANS LE PANIER
     function addToCart($article) {
+        //var_dump($article->id);
         $isArticleAlreadyAdded = false;
         for($i = 0; $i < count($_SESSION["cart"]) ; $i++) {
+            //var_dump($_SESSION["cart"]);
             if ($_SESSION["cart"][$i]["id"] == $article["id"]) {
                 echo "<div class=\"col-12 text-center\">
                         <p style=\"color : red\">Cet article est déjà présent dans votre panier !</p>
                       </div>";
                 $isArticleAlreadyAdded = true;
-            }   
+            }
         }
         if (!$isArticleAlreadyAdded) {
             $article["quantity"] = 1;
@@ -162,27 +175,29 @@ INDEX
 
 
     // AFFICHER LE PANIER
-    function displayCart() {
+    $totalPrice = 0;
+    function displayCart($totalPrice) {
         if(count($_SESSION["cart"]) > 0) {
             foreach($_SESSION["cart"] as $article) {
-                $priceFormat = number_format($article['price'], 2, ",", " ");
-                $totalPriceFormat = number_format($article['totalPrice'], 2, ",", " ");
+                $priceFormat = number_format($article["prix"], 2, ",", " ");
+                $totalPrice = $article["prix"] * $article["quantity"];
+                $totalPriceFormat = number_format($totalPrice, 2, ",", " ");
                 echo "
                     <div class=\"card mb-3\">
                         <div class=\"row g-0\">
                             <div class=\"col-md-2 align-self-center\">
-                                <img src=\"" . $article["img"] . "\" class=\"img-fluid rounded-start\" alt=\"impage produit\">
+                                <img src=\"" . $article["image"] . "\" class=\"img-fluid rounded-start\" alt=\"impage produit\">
                             </div>
                             <div class=\"col-md-3 align-self-center text-center\">
                                 <div class=\"card-body\">
-                                    <h5 class=\"card-title\">" . $article["name"] . "</h5>
+                                    <h5 class=\"card-title\">" . $article["nom"] . "</h5>
                                 </div>
                             </div>
                             <div class=\"col-md-2 align-self-center text-center\">
                                 <div class=\"card-body\">
                                     <p class=\"card-text\">" . $priceFormat . "€<span>/unité</span></p>
                                     <form action=\"add-to-cart.php\" method=\"post\"> 
-                                        <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["price"] . "\">
+                                        <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["prix"] . "\">
                                     </form>
                                 </div>
                             </div>
@@ -197,9 +212,9 @@ INDEX
                             </div>
                             <div class=\"col-md-2 align-self-center text-center\">
                                 <div class=\"card-body\">
-                                    <p class=\"card-text\">" . $totalPriceFormat . "€</p>
+                                <p class=\"card-text\">" . $totalPriceFormat . "€</p>
                                     <form action=\"add-to-cart.php\" method=\"post\"> 
-                                        <input type=\"hidden\" name=\"itotalPrice\" value=\"" . $article["totalPrice"] . "\">
+                                        <input type=\"hidden\" name=\"itotalPrice\" value=\"\">
                                     </form>
                                 </div>
                             </div>
@@ -214,6 +229,7 @@ INDEX
                         </div>
                     </div>
                     ";
+
             }
         } else {
             echo "<div class=\"col-12 text-center\">
@@ -247,8 +263,7 @@ INDEX
                             </form>
                         </div>
                     </div>
-
-                    ";           
+                 ";           
         }
     }
     
@@ -279,10 +294,12 @@ INDEX
     
 
     // AFFICHER LE PRIX TOTAL DU PANIER
+    $total=0;
+    $totalQuantity=0;
     function totalPrice($total, $totalQuantity) {
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
-                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
                 $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
                 $formatTotal = number_format($total, 2, ",", " ");
                 $tva = ($total / 120) * 20;
@@ -387,7 +404,7 @@ INDEX
     function changeQuantity($quantity, $articleid) {
         for($i = 0; $i < count($_SESSION["cart"]); $i++) {
             if ($_SESSION["cart"][$i]["quantity"] !== $quantity && $_SESSION["cart"][$i]["id"] == $articleid) {
-                $_SESSION["cart"][$i]["totalPrice"] = $_SESSION["cart"][$i]["price"] * $quantity;
+                $_SESSION["cart"][$i]["totalPrice"] = $_SESSION["cart"][$i]["prix"] * $quantity;
                 $_SESSION["cart"][$i]["quantity"] = $quantity;
                 echo "<div class=\"col-12 text-center\">
                         <p>La quantité a été modifiée.</p>
@@ -439,61 +456,12 @@ INDEX
     }
 
 
-    // AFFICHAGE TITRE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
-    function showMoreArticlesTitle() {        
-        if(count($_SESSION["cart"]) > 0) {
-            echo "
-                    <div class=\"row\">
-                        <div class=\"col-12 text-center\">
-                            <h1>Les clients qui ont acheté ceci ont également acheté</h1>
-                        </div>
-                    </div>               
-                 ";
-        }       
-    }
-
-    // AFFICHAGE CEUX QUI ONT ACHETE ONT AUSSI ACHETE
-    function showMoreArticles() {
-        $articles = getArticles();
-        if(count($_SESSION["cart"]) > 0) {
-            for($i = 0; $i < count($_SESSION["cart"]); $i++){
-                foreach($articles as $article) {
-                    if ($_SESSION["cart"][$i]["id"] !== $article["id"] && !in_array($article["id"], $_SESSION["cart"][$i])) {
-                        $priceFormat = number_format($article["price"], 2, ",", " ");
-                        echo " 
-                                <div class=\"col-12 col-sm-6 col-lg-4 text-center mb-5\">
-                                    <div class=\"card\">
-                                        <img src=\"" . $article["img"] . "\" class=\"card-img-top\" alt=\"image produit\">
-                                        <div class=\"card-body\">
-                                            <h5 class=\"card-title\">" . $article["name"] . "</h5>
-                                            <p class=\"card-text\"><span>" . $article["specPrice"] . "</span>" . " " . $priceFormat . "€</p>
-                                            <form action=\"product.php\" method=\"post\">
-                                                <input type=\"hidden\" name=\"id\" value=\"" . $article["id"] . "\" />
-                                                <input type=\"submit\" value=\"En détails\" class=\"buttonLarge\"/>
-                                            </form>
-                                            <form action=\"add-to-cart.php\" method=\"post\">
-                                                <input type=\"hidden\" name=\"name\" value=\"" . $article["name"] . "\" />
-                                                <input type=\"hidden\" name=\"price\" value=\"" . $article["price"] . "\" />
-                                                <input type=\"hidden\" name=\"id\" value=\"" . $article["id"] . "\" />
-                                                <input type=\"submit\" value=\"Ajouter au panier\" class=\"buttonLargeImpact\"/>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>                  
-                            ";     
-                    } 
-                }
-            }
-            
-        }
-    }
-
-
     // AFFICHER LE RECAP TOTAL DU PANIER PAGE VALIDATION
     function finalTotalPrice($total, $totalQuantity) {
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
-                $total += $_SESSION["cart"][$i]["totalPrice"];
+                global $total;
+                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
                 $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
                 $formatTotal = number_format($total, 2, ",", " ");
                 $tva = ($total / 120) * 20;
@@ -585,24 +553,25 @@ INDEX
     function displayFinalCart() {
         if(count($_SESSION["cart"]) > 0) {
             foreach($_SESSION["cart"] as $article) {
-                $priceFormat = number_format($article['price'], 2, ",", " ");
-                $totalPriceFormat = number_format($article['totalPrice'], 2, ",", " ");
+                $priceFormat = number_format($article["prix"], 2, ",", " ");
+                $totalPrice = $article["prix"] * $article["quantity"];
+                $totalPriceFormat = number_format($totalPrice, 2, ",", " ");
                     echo "
                     <div class=\"card mb-3\">
                         <div class=\"row g-0\">
                             <div class=\"col-md-2 align-self-center\">
-                                <img src=\"" . $article["img"] . "\" class=\"img-fluid rounded-start\" alt=\"impage produit\">
+                                <img src=\"" . $article["image"] . "\" class=\"img-fluid rounded-start\" alt=\"impage produit\">
                             </div>
                             <div class=\"col-md-3 align-self-center text-center\">
                                 <div class=\"card-body\">
-                                    <h5 class=\"card-title\">" . $article["name"] . "</h5>
+                                    <h5 class=\"card-title\">" . $article["nom"] . "</h5>
                                 </div>
                             </div>
                             <div class=\"col-md-2 align-self-center text-center\">
                                 <div class=\"card-body\">
                                     <p class=\"card-text\">" . $priceFormat . "€<span>/unité</span></p>
                                     <form action=\"add-to-cart.php\" method=\"post\"> 
-                                        <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["price"] . "\">
+                                        <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["prix"] . "\">
                                     </form>
                                 </div>
                             </div>
@@ -619,7 +588,7 @@ INDEX
                                 <div class=\"card-body\">
                                     <p class=\"card-text\">" . $totalPriceFormat . "€</p>
                                     <form action=\"shopping-cart.php\" method=\"post\"> 
-                                        <input type=\"hidden\" name=\"itotalPrice\" value=\"" . $article["totalPrice"] . "\">
+                                        <input type=\"hidden\" name=\"itotalPrice\" value=\"" . $totalPriceFormat . "\">
                                     </form>
                                 </div>
                             </div>
@@ -648,7 +617,7 @@ INDEX
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
                 $shippingFees = 0.9;
-                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
                 $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
                 $totalShippingFees = $totalQuantity * $shippingFees;
                 $totalWithShippingFees = $total + $totalShippingFees;     
@@ -684,14 +653,13 @@ INDEX
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
                 $shippingFees = 0.9;
-                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
                 $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
                 $totalShippingFees = $totalQuantity * $shippingFees;
                 $totalWithShippingFees = $total + $totalShippingFees;     
                 $formatShippingFees = number_format($shippingFees, 2, ",", " "); 
                 $formatTotalShippingFees = number_format($totalShippingFees, 2, ",", " ");
                 $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");
- 
                 setlocale(LC_TIME, "fr_FR", "French");
                 $expedition = utf8_encode(date('Y-m-d', strtotime("+2 days")));
                 $delivery = date('Y-m-d', strtotime("+6 days"));
@@ -724,7 +692,7 @@ INDEX
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
                 $shippingFees = 0.9;
-                $total += $_SESSION["cart"][$i]["totalPrice"];
+                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
                 $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
                 $totalShippingFees = $totalQuantity * $shippingFees;
                 $totalWithShippingFees = $total + $totalShippingFees;     

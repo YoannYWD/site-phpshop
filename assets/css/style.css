@@ -163,7 +163,6 @@ form button i.details {
 }
 
 
-
 /* NAVBAR
 *****************************************/
 
@@ -191,8 +190,13 @@ nav {
     color: #F4C84E!important;
 }
 
+.navbar .connection-item {
+    margin-left: 100px;
+}
 
-
+.connection {
+    color:#FFFFFF;
+}
 
 
 /* INDEX.PHP
