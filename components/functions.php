@@ -176,13 +176,66 @@ INDEX
 
     // AFFICHER LE PANIER
     $totalPrice = 0;
-    function displayCart($totalPrice) {
+    $stock = 0;
+    function displayCart($totalPrice, $stock) {
         if(count($_SESSION["cart"]) > 0) {
             foreach($_SESSION["cart"] as $article) {
                 $priceFormat = number_format($article["prix"], 2, ",", " ");
                 $totalPrice = $article["prix"] * $article["quantity"];
                 $totalPriceFormat = number_format($totalPrice, 2, ",", " ");
-                echo "
+                global $stock;
+                $stock = $article["stock"] - $article["quantity"];
+                if ($stock >= 0) {
+                    echo "
+                        <div class=\"card mb-3\">
+                            <div class=\"row g-0\">
+                                <div class=\"col-md-2 align-self-center\">
+                                    <img src=\"" . $article["image"] . "\" class=\"img-fluid rounded-start\" alt=\"impage produit\">
+                                </div>
+                                <div class=\"col-md-3 align-self-center text-center\">
+                                    <div class=\"card-body\">
+                                        <h5 class=\"card-title\">" . $article["nom"] . "</h5>
+                                    </div>
+                                </div>
+                                <div class=\"col-md-2 align-self-center text-center\">
+                                    <div class=\"card-body\">
+                                        <p class=\"card-text\">" . $priceFormat . "€<span>/unité</span></p>
+                                        <form action=\"add-to-cart.php\" method=\"post\"> 
+                                            <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["prix"] . "\">
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class=\"col-md-2 align-self-center text-center\">
+                                    <div class=\"card-body\">
+                                        <form action=\"add-to-cart.php\" method=\"post\"> 
+                                            <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" size=\"5\" value=\"" . $article["quantity"] . "\">
+                                            <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
+                                            <input type=\"submit\" value=\"Modifier\" class=\"button\"/>
+                                        </form>
+                                        <p>$stock produits restant.</p>
+                                    </div>
+                                </div>
+                                <div class=\"col-md-2 align-self-center text-center\">
+                                    <div class=\"card-body\">
+                                    <p class=\"card-text\">" . $totalPriceFormat . "€</p>
+                                        <form action=\"add-to-cart.php\" method=\"post\"> 
+                                            <input type=\"hidden\" name=\"itotalPrice\" value=\"\">
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class=\"col-md-1 align-self-center text-center\">
+                                    <div class=\"card-body\">
+                                        <form action=\"add-to-cart.php\" method=\"post\">
+                                            <input type=\"hidden\" name=\"deleteArticle\" value=\"" . $article["id"] . "\"/>
+                                            <button type=\"submit\"><i class=\"fas fa-trash-alt\" class=\"btn\"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        ";
+                } else {
+                    echo "
                     <div class=\"card mb-3\">
                         <div class=\"row g-0\">
                             <div class=\"col-md-2 align-self-center\">
@@ -208,6 +261,7 @@ INDEX
                                         <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
                                         <input type=\"submit\" value=\"Modifier\" class=\"button\"/>
                                     </form>
+                                    <p>Stock insuffisant</p>
                                 </div>
                             </div>
                             <div class=\"col-md-2 align-self-center text-center\">
@@ -229,6 +283,7 @@ INDEX
                         </div>
                     </div>
                     ";
+                }
 
             }
         } else {

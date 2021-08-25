@@ -51,7 +51,12 @@
 
 <?php
     if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
-        changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+        global $stock;
+        if ($stock >= 0 ) {
+            changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+        } else {
+            return false;
+        }
     }
     if (isset($_POST['deleteArticle'])) {
         deleteArticle($_POST['deleteArticle']);
@@ -67,7 +72,8 @@
     <div class="row">      
         <div class="col-12 col-xl-10">
             <?php
-                displayCart($totalPrice);
+                displayCart($totalPrice, $stock);
+                var_dump($stock);
 
                 // Si panier vide, phrase retour page articles
                 backToArticles();

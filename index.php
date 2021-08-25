@@ -16,6 +16,7 @@
         unset($_SESSION["nom"]);
         unset($_SESSION["prenom"]);
         unset($_SESSION["idd"]);
+        $_SESSION["cart"] = [];
         header("Location:index.php");
     }
 
