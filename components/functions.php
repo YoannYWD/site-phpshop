@@ -40,7 +40,7 @@ INDEX
             "price" => 9,
             "specPrice" => "",
             "totalPrice" => 9, 
-            "desc" => "Lève-cadres ergonomique, robuste et astucieux ! "
+            "desc" => "Lève-cadres ergonomique, robuste et astucieux !"
         ];
         $article2 = [
             "id" => 2,
