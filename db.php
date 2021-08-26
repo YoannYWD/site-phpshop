@@ -3,8 +3,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $dsn = "mysql:host=localhost;dbname=boutique_en_ligne";
-$username = "Yoann";
-$password = "Balmora1034!";
+$username = "root";
+$password = "";
 $options = [];
 $connection = new PDO($dsn, $username, $password, $options); // connection en instance de PDO
 try { // fonction d'exception
