@@ -176,14 +176,12 @@ INDEX
 
     // AFFICHER LE PANIER
     $totalPrice = 0;
-    $stock = 0;
-    function displayCart($totalPrice, $stock) {
+    function displayCart($totalPrice) {
         if(count($_SESSION["cart"]) > 0) {
             foreach($_SESSION["cart"] as $article) {
                 $priceFormat = number_format($article["prix"], 2, ",", " ");
                 $totalPrice = $article["prix"] * $article["quantity"];
                 $totalPriceFormat = number_format($totalPrice, 2, ",", " ");
-                global $stock;
                 $stock = $article["stock"] - $article["quantity"];
                 if ($stock >= 0) {
                     echo "
@@ -208,7 +206,7 @@ INDEX
                                 <div class=\"col-md-2 align-self-center text-center\">
                                     <div class=\"card-body\">
                                         <form action=\"add-to-cart.php\" method=\"post\"> 
-                                            <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"10\" size=\"5\" value=\"" . $article["quantity"] . "\">
+                                            <input type=\"number\" name=\"changeQuantity\" min=\"1\" max=\"" . $article["stock"] . "\" size=\"5\" value=\"" . $article["quantity"] . "\">
                                             <input type=\"hidden\" name=\"changeQuantityId\" min=\"1\" max=\"10\" value=\"" . $article["id"] . "\">
                                             <input type=\"submit\" value=\"Modifier\" class=\"button\"/>
                                         </form>
@@ -461,9 +459,9 @@ INDEX
             if ($_SESSION["cart"][$i]["quantity"] !== $quantity && $_SESSION["cart"][$i]["id"] == $articleid) {
                 $_SESSION["cart"][$i]["totalPrice"] = $_SESSION["cart"][$i]["prix"] * $quantity;
                 $_SESSION["cart"][$i]["quantity"] = $quantity;
-                echo "<div class=\"col-12 text-center\">
-                        <p>La quantité a été modifiée.</p>
-                      </div>";
+                    echo "<div class=\"col-12 text-center\">
+                            <p>La quantité a été modifiée.</p>
+                          </div>";               
             } 
         }
     }
@@ -703,45 +701,20 @@ INDEX
         }
     }
 
-    // AFFICHAGE MODAL
-    function displayModal($total, $totalWithShippingFees, $totalQuantity) {
-        if(count($_SESSION["cart"]) > 0) {
-            for($i = 0; $i < count($_SESSION["cart"]); $i++) {
-                $shippingFees = 0.9;
-                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
-                $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
-                $totalShippingFees = $totalQuantity * $shippingFees;
-                $totalWithShippingFees = $total + $totalShippingFees;     
-                $formatShippingFees = number_format($shippingFees, 2, ",", " "); 
-                $formatTotalShippingFees = number_format($totalShippingFees, 2, ",", " ");
-                $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");
-                setlocale(LC_TIME, "fr_FR", "French");
-                $expedition = utf8_encode(date('Y-m-d', strtotime("+2 days")));
-                $delivery = date('Y-m-d', strtotime("+6 days"));
-        
-            }
-            echo "
-                    <h5 class=\"text-center mb-4 totalTTC\">Montant payé : " . $formatTotalWithShippingFees . "€</h5>
-                    <p class=\"text-center \">Expédition prévue le : " . utf8_encode(strftime("%A %d %B %G", strtotime($expedition))) . "</p>
-                    <p class=\"text-center mb-4\">Livraison estimée le : " . utf8_encode(strftime("%A %d %B %G", strtotime($delivery))) . "</p>
-                    <h5 class=\"text-center\">Merci pour votre confiance !</h5>
-                 ";
-        }
-    }
-
-
+    
+    
     // BOUTON PASSER A LA LIVRAISON
     function goToDelivery() {
         if ($_SESSION["cart"] > 0) {
             echo "
-                <form action=\"delivery.php\" method=\"post\">
-                    <input type=\"submit\" value=\"Choisir la livraison\" class=\"buttonLargeImpact\"/>
-                </form>
-                 ";
+            <form action=\"delivery.php\" method=\"post\">
+            <input type=\"submit\" value=\"Choisir la livraison\" class=\"buttonLargeImpact\"/>
+            </form>
+            ";
         } 
     }
-
-
+    
+    
     // PRIX AVEC FRAIS DE LIVRAISON
     function priceWithDelivery($total, $totalWithShippingFees, $totalQuantity, $deliveryValue) {
         if(count($_SESSION["cart"]) > 0) {
@@ -754,60 +727,142 @@ INDEX
                 $formatShippingFees = number_format($shippingFees, 2, ",", " "); 
                 $formatTotalShippingFees = number_format($totalShippingFees, 2, ",", " ");
                 $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");
+                $formatDeliveryValue = number_format($deliveryValue, 2, ",", " ");
                 $totalWithDelivery = $totalWithShippingFees + intval($deliveryValue);
                 $formatTotalWithDelivery = number_format($totalWithDelivery, 2, ",", " ");          
             }
             echo "
-                    <h5 class=\"text-center mt-2 mb-3\">Livraison</h5>
-                    <div class=\"row\">
-                        <div class=\"col-12\">
-                            <p class=\"text-center\">Vous avez choisi la livraison " . ".</p>
-                        </div>
+            <div class=\"row beforeTotalTTC\">
+                <h1></h1></div>
+                <div class=\"row\">
+                    <div class=\"col-6 offset-sm-2 col-sm-4 offset-md-3 col-md-3\">
+                        <p class=\"totalTTC\">TOTAL avec livraison : </p>
                     </div>
-                    <div class=\"row beforeTotalTTC\">
-                    <h1></h1></div>
-                    <div class=\"row\">
-                        <div class=\"col-6 offset-sm-2 col-sm-4 offset-md-3 col-md-3\">
-                            <p class=\"totalTTC\">TOTAL avec livraison : </p>
-                        </div>
-                        <div class=\"col-6 col-sm-4 col-md-3\">
-                            <p class=\"text-end totalTTC\">" . $formatTotalWithDelivery . "€</p>
-                        </div>
+                    <div class=\"col-6 col-sm-4 col-md-3\">
+                        <p class=\"text-end totalTTC\">" . $formatTotalWithDelivery . "€</p>
                     </div>
-                 ";
+                </div>
+                <div class=\"row\">
+                    <div class=\"col-6 offset-sm-2 col-sm-4 offset-md-3 col-md-3\">
+                        <p>Livraison : " . $formatDeliveryValue . "€</p>
+                    </div>
+            </div>
+            ";
         }
     }
 
+
+    // AFFICHAGE PANIER LIVRAISON
+    function displayDeliveryCart() {
+        if(count($_SESSION["cart"]) > 0) {
+            foreach($_SESSION["cart"] as $article) {
+                $priceFormat = number_format($article["prix"], 2, ",", " ");
+                $totalPrice = $article["prix"] * $article["quantity"];
+                $totalPriceFormat = number_format($totalPrice, 2, ",", " ");
+                    echo "
+                    <div class=\"card mb-3\">
+                        <div class=\"row g-0\">
+                            <div class=\"col-md-2 align-self-center\">
+                                <img src=\"" . $article["image"] . "\" class=\"img-fluid rounded-start\" alt=\"impage produit\">
+                            </div>
+                            <div class=\"col-md-3 align-self-center text-center\">
+                                <div class=\"card-body\">
+                                    <h5 class=\"card-title\">" . $article["nom"] . "</h5>
+                                </div>
+                            </div>
+                            <div class=\"col-md-2 align-self-center text-center\">
+                                <div class=\"card-body\">
+                                    <p class=\"card-text\">" . $priceFormat . "€<span>/unité</span></p>
+                                    <form action=\"add-to-cart.php\" method=\"post\"> 
+                                        <input type=\"hidden\" name=\"itemPrice\" value=\"" . $article["prix"] . "\">
+                                    </form>
+                                </div>
+                            </div>
+                            <div class=\"col-md-3 align-self-center text-center\">
+                                <div class=\"card-body\">
+                                    <p class=\"card-text\">Quantité : " . $article["quantity"] . "</p>
+                                </div>
+                            </div>
+                            <div class=\"col-md-2 align-self-center text-center\">
+                                <div class=\"card-body\">
+                                    <p class=\"card-text\">" . $totalPriceFormat . "€</p>
+                                    <form action=\"shopping-cart.php\" method=\"post\"> 
+                                        <input type=\"hidden\" name=\"itotalPrice\" value=\"" . $totalPriceFormat . "\">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ";
+            }
+        } else {
+            echo "<div class=\"col-12 text-center\">
+                    <p>Votre panier est vide.</p>
+                  </div>";
+        }
+    }
+    
+    
+    // AFFICHAGE MODAL
+    $formatTotalWithDelivery = 0;
+    function displayModal($total, $totalWithShippingFees, $totalQuantity, $deliveryValue, $formatTotalWithDelivery) {
+        if(count($_SESSION["cart"]) > 0) {
+            for($i = 0; $i < count($_SESSION["cart"]); $i++) {
+                $shippingFees = 0.9;
+                $total += $_SESSION["cart"][$i]["prix"] * $_SESSION["cart"][$i]["quantity"];
+                $totalQuantity += intval($_SESSION["cart"][$i]["quantity"]);
+                $totalShippingFees = $totalQuantity * $shippingFees;
+                $totalWithShippingFees = $total + $totalShippingFees;     
+                $formatShippingFees = number_format($shippingFees, 2, ",", " "); 
+                $formatTotalShippingFees = number_format($totalShippingFees, 2, ",", " ");
+                $formatDeliveryValue = number_format($deliveryValue, 2, ",", " ");
+                $totalWithDelivery = $totalWithShippingFees + intval($deliveryValue);
+                $formatTotalWithShippingFees = number_format($totalWithShippingFees, 2, ",", " ");
+                global $formatTotalWithDelivery;
+                $formatTotalWithDelivery = number_format($totalWithDelivery, 2, ",", " ");   
+                setlocale(LC_TIME, "fr_FR", "French");
+                $expedition = utf8_encode(date('Y-m-d', strtotime("+2 days")));
+                $delivery = date('Y-m-d', strtotime("+6 days"));
+        
+            }
+            echo "
+                    <h5 class=\"text-center mb-4 totalTTC\">Montant payé : " . $formatTotalWithDelivery  . "€</h5>
+                    <p class=\"text-center \">Expédition prévue le : " . utf8_encode(strftime("%A %d %B %G", strtotime($expedition))) . "</p>
+                    <p class=\"text-center mb-4\">Livraison estimée le : " . utf8_encode(strftime("%A %d %B %G", strtotime($delivery))) . "</p>
+                    <h5 class=\"text-center\">Merci pour votre confiance !</h5>
+                 ";
+            
+        }
+        return $formatTotalWithDelivery;
+    }
 
 
     // BOUTON RETOUR PAGE ACCUEIL
     function validateShoppingCart() {
         if ($_SESSION["cart"] > 0) {
-            echo "
-                <form action=\"index.php\" method=\"post\">
+            $rand = rand(0, 9999999);
+            $numero = str_pad($rand, 7, '0', STR_PAD_LEFT);
+            for($i = 0; $i < count($_SESSION["cart"]); $i++) {
+                var_dump($_SESSION["cart"]);
+                $prix = $GLOBALS["formatTotalWithDelivery"];
+                $date = date('Y-m-d');
+                $date_commande = utf8_encode(strftime("%A %d %B %G", strtotime($date)));
+                $id_client = $_SESSION["idd"];
+                $articleId = $_SESSION["cart"][$i]["id"];
+                $stock = $_SESSION["cart"][$i]["stock"] - $_SESSION["cart"][$i]["quantity"];       
+                    echo "<form action=\"index.php\" method=\"post\">
+                            <input type=\"hidden\" name=\"articleId\" value=\"" . $articleId . "\">
+                            <input type=\"hidden\" name=\"stock\" value=\"" . $stock . "\">
+                            <input type=\"hidden\" name=\"id_client\" value=\"" . $id_client . "\">
+                         ";
+            } 
+            echo "  <p class=\"text-end\">Commande n°" . $numero . "</p>
+                    <input type=\"hidden\" name=\"numero\" value=\"" . $numero . "\">
+                    <input type=\"hidden\" name=\"date_commande\" value=\"" . $date_commande . "\">
+                    <input type=\"hidden\" name=\"prix\" value=\"" . $prix . "\">
                     <input type=\"submit\" name=\"validateAndDeleteAllArticles\" value=\"Retour à la page d'accueil\" class=\"buttonLargeImpact\"/>
-                </form>
-                 ";
-        } 
+                </form>";           
+        }  
     }
-
-
-    // function delivery() {
-    //     if (isset($_POST['delivery']) && ($_POST['delivery'] == $deliveryValue)) {
-    //         $ending = "checked";
-    //         return $ending;
-    //     }
-    //     else{
-    //         $ending = "";
-    //         return $ending;
-    //     }
-    // }
-
-    // function displayDelivery($deliveryValues) {
-    //     foreach($deliveryValues as $deliveryValue){
-    //         echo "<label class=\"radio\" for=" . $deliveryValue . ">" . $deliveryValue . ",00€</label>
-    //                 <input type=\"radio\" name=\"delivery\" value=\"" . $deliveryValue . "\" " . delivery($deliveryValue) . "/>";
-    //     }
-    // }
 
 ?>

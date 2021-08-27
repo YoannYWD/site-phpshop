@@ -10,7 +10,19 @@
         $_SESSION['cart'] = [];
     }
     if (isset($_POST["validateAndDeleteAllArticles"])) {
-        deleteAllArticles();
+        $articleId = $_POST["articleId"];
+        $stock = $_POST["stock"];
+        $id_client = $_POST["id_client"];
+        $date_commande = $_POST["date_commande"];
+        $numero = $_POST["numero"];
+        $prix = $_POST["prix"];
+        $sql = "UPDATE articles SET articles.stock = '$stock' WHERE articles.id = '$articleId';";
+        $statement = $connection->prepare($sql);
+        $result = $statement->execute();;
+        $sql = "INSERT INTO commandes (id_client, numero, date_commande, prix) VALUES ('$id_client', '$numero', '$date_commande', '$prix');";
+        $statement = $connection->prepare($sql);
+        $result = $statement->execute();
+        $_SESSION["cart"] = [];
     }
     if (isset($_POST["log_out"])) {
         unset($_SESSION["nom"]);
@@ -19,6 +31,7 @@
         $_SESSION["cart"] = [];
         header("Location:index.php");
     }
+
 
 ?>
 
@@ -49,7 +62,7 @@
 <div class="container-fluid containerCart">
     <div class="row">
         <div class="offset-8 col-4 offset-sm-9 col-sm-3 offset-md-10 col-md-2 offset-xxl-11 col-xxl-1">
-            <a href="/phpshop/add-to-cart">
+            <a href="/site-phpshop/add-to-cart">
                 <div class="itemCart text-center">
                     <p class="mt-1 mb-0">Mon panier</p>
                     <p class="m-0 mb-1">

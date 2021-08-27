@@ -13,33 +13,6 @@
     if (isset($_POST['deleteAllArticles'])) {
         deleteAllArticles();
     }
-    if (isset($_POST["mod_user"]) 
-        && isset($_POST["nom"]) 
-        && isset($_POST["prenom"]) 
-        && isset($_POST["email"]) 
-        && isset($_POST["adresse"]) 
-        && isset($_POST["code_postal"])
-        && isset($_POST["ville"])) {
-            $id = $_SESSION["idd"];
-            $nom = $_POST["nom"];
-            $prenom = $_POST["prenom"];
-            $email = $_POST["email"];
-            $adresse = $_POST["adresse"];
-            $code_postal = $_POST["code_postal"];
-            $ville = $_POST["ville"];
-            $sql = "UPDATE clients INNER JOIN adresses 
-                    SET clients.nom = '$nom', 
-                        clients.prenom = '$prenom', 
-                        clients.email = '$email', 
-                        adresses.adresse = '$adresse',
-                        adresses.code_postal = '$code_postal',
-                        adresses.ville = '$ville'
-                    WHERE adresses.id_client = '$id' AND clients.id = '$id'; ";
-            $statement = $connection->prepare($sql);
-            $statement->execute();
-            $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
-            echo "<p class=\"text-center text-decoration-underline\">Les modifications ont été prises en compte.</p>";
-        }
 ?>
 
 <div class="container titlePageContainer">
@@ -51,7 +24,6 @@
 </div>
 
 <?php
-
     if (isset($_POST["mod_user"]) 
     or isset($_POST["nom"]) 
     or isset($_POST["prenom"]) 
@@ -79,7 +51,6 @@
         $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
         echo "<p class=\"text-center\">Les modifications ont été prises en compte.</p>";
     }
-
 ?>
 
 <div class="container">
@@ -110,7 +81,7 @@
                       <p>" . $clientConnecte[0]["code_postal"] . " " . $clientConnecte[0]["ville"] . "</p>
                       <br>
                       <form action=\"orders.php\" method=\"post\">
-                        <input type=\"submit\" value=\"Voir mes commandes\" class=\"buttonLargeImpact\"/>
+                        <input type=\"submit\" name=\"orders\" value=\"Voir mes commandes\" class=\"buttonLargeImpact\"/>
                       </form>";
             ?>
         </div>
@@ -144,28 +115,6 @@
                 </form>";
             ?>
         </div>
-        <!--
-        <div class="col-4 offset-1 text-center mt-5 mb-5">
-
-        <form action="profile.php" method="post">
-            <p class="text-decoration-underline">Modifier mon nom :</p>
-                <input class="form-control" type="text" name="nom" value="Doe">
-            <br>
-            <p class="text-decoration-underline">Modifier mon prénom :</p>
-                <input class="form-control" type="text" name="prenom" value="">
-            <br>
-            <p class="text-decoration-underline">Modifier mon adresse mail :</p>
-                <input class="form-control" type="email" name="email" value="">
-            <br>
-            <p class="text-decoration-underline">Modifier mon adresse :</p>
-                <input class="form-control" type="text" name="adresse" placeholder="Rue, boulevard, impasse...">
-                <input class="form-control" type="text" name="code_postal" placeholder="Code postal">
-                <input class="form-control" type="text" name="ville" placeholder="Ville">
-            <input type="submit" value="Valider mes modifications" name="mod_user" class="buttonLarge"/>
-            </form>
-
-        </div>
--->
     </div>
 </div>
 

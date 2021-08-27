@@ -34,14 +34,6 @@
 
 <!-- AFFICHAGE DU OU DES PRODUITS
 ------------------------------------------------------------------->
-<?php
-    if (isset($_SESSION["prenom"]) && $_SESSION["nom"]){
-        echo "<div class=\"connection\">
-                <p>Vous êtes connecté en tant que " . $_SESSION["prenom"] . " " . $_SESSION["nom"] . ".<p>
-                <input type=\"submit\" class=\"buttonLarge\" name=\"reg_user\" value=\"Se déconnecter\">
-              </div>";
-    }
-?>
 
 <div class="container titlePageContainer">
     <div class="row">
@@ -74,22 +66,73 @@
     <div class="row">
         <div class="col-12 summary">
             <div class="card mb-3 p-2">
+            <h5 class="text-center mt-2 mb-3">Votre adresse</h5>
+                    <div class="col-12 text-center mb-5">
+                        <?php
+                            if (isset($_POST["mod_user"]) 
+                            or isset($_POST["adresse"]) 
+                            or isset($_POST["code_postal"])
+                            or isset($_POST["ville"])) {
+                                $id = $_SESSION["idd"];
+                                $adresse = $_POST["adresse"];
+                                $code_postal = $_POST["code_postal"];
+                                $ville = $_POST["ville"];
+                                $sql = "UPDATE clients INNER JOIN adresses 
+                                        SET adresses.adresse = '$adresse',
+                                            adresses.code_postal = '$code_postal',
+                                            adresses.ville = '$ville'
+                                        WHERE adresses.id_client = '$id';";
+                                $statement = $connection->prepare($sql);
+                                $statement->execute();
+                                $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
+                                echo "<p class=\"text-center\">Les modifications ont été prises en compte :</p>";
+                            }
+                            $nom = $_SESSION["nom"];
+                            $prenom = $_SESSION["prenom"];
+                            $id = $_SESSION["idd"];
+                            $sql = "SELECT c.nom, c.prenom, c.email, a.adresse, a.code_postal, a.ville FROM clients AS c
+                                    INNER JOIN adresses AS a
+                                    ON c.id = a.id_client
+                                    WHERE c.id = '$id';";
+                            $statement = $connection->prepare($sql);
+                            $statement->execute();
+                            $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
+                            echo "
+                                <p>" . $clientConnecte[0]["adresse"] . "</p>
+                                <p>" . $clientConnecte[0]["code_postal"] . " " . $clientConnecte[0]["ville"] . "</p>";
+                        ?>
+                    </div>
+                    <div class="col-6 offset-3 text-center mb-5">
+                        <?php
+                            $nom = $_SESSION["nom"];
+                            $prenom = $_SESSION["prenom"];
+                            $id = $_SESSION["idd"];
+                            $sql = "SELECT c.nom, c.prenom, c.email, a.adresse, a.code_postal, a.ville FROM clients AS c
+                                    INNER JOIN adresses AS a
+                                    ON c.id = a.id_client
+                                    WHERE c.id = '$id';";
+                            $statement = $connection->prepare($sql);
+                            $statement->execute();
+                            $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
+                            echo "<form action=\"delivery.php\" method=\"post\">
+                            <h5 class=\"text-center mt-2 mb-3\">Modifier mon adresse</h5>
+                                    <input class=\"form-control\" type=\"text\" name=\"adresse\" placeholder=\"Rue, boulevard, impasse...\" value=\"" . $clientConnecte[0]["adresse"] . "\">
+                                    <input class=\"form-control\" type=\"text\" name=\"code_postal\" placeholder=\"Code postal\" value=\"" . $clientConnecte[0]["code_postal"] . "\">
+                                    <input class=\"form-control\" type=\"text\" name=\"ville\" placeholder=\"Ville\" value=\"" . $clientConnecte[0]["ville"] . "\">
+                                    <input type=\"submit\" value=\"Valider mes modifications\" name=\"mod_user\" class=\"buttonLarge\"/>
+                                    </form>";
+                        ?>
+                    </div>
+
                 <?php   
-                    //if (isset($_POST["delivery"])) {
-                    //    var_dump($_POST["delivery"]);
-                    //}
-                                           
-                    // Prix avec frais de port
-                    $deliveryValue = 0;
+                    $deliveryValue = 5;
                     $total = 0;
                     $totalWithShippingFees = 0;
                     $totalQuantity=0;
                     priceWithDelivery($total, $totalWithShippingFees, $totalQuantity, $deliveryValue);
-
-                    // bouton supprimer tous les articles
-                    //deleteAllBtn();
                 ?>
             </div>
+
         </div>
         <!-- MODAL -->
         <div class="col-12 text-center">
@@ -100,14 +143,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">Commande validée !</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <?php
-                            $total = 0;
-                            $totalWithShippingFees = 0;
-                            $totalQuantity=0;
-                            displayModal($total, $totalWithShippingFees, $totalQuantity);
+                            displayModal($total, $totalWithShippingFees, $totalQuantity, $deliveryValue, $formatTotalWithDelivery);
                         ?>
                     </div>
                     <div class="modal-footer">
@@ -117,6 +156,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-12">
+            
+            <?php
+                displayDeliveryCart();
+                backToArticles();
+            ?>     
         </div>
     </div>
 </div>

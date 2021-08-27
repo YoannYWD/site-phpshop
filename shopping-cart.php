@@ -32,14 +32,6 @@
 
 <!-- AFFICHAGE PAGE
 ------------------------------------------------------------------->
-<?php
-    if (isset($_SESSION["prenom"]) && $_SESSION["nom"]){
-        echo "<div class=\"connection\">
-                <p>Vous êtes connecté en tant que " . $_SESSION["prenom"] . " " . $_SESSION["nom"] . ".<p>
-                <input type=\"submit\" class=\"buttonLarge\" name=\"reg_user\" value=\"Se déconnecter\">
-              </div>";
-    }
-?>
 
 <div class="container titlePageContainer">
     <div class="row">
