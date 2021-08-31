@@ -752,8 +752,8 @@ $totalWithDelivery = 0;
     }
 
     
-    // AFFICHAGE MODAL
 
+    // AFFICHAGE MODAL
     function displayModal($total, $totalWithShippingFees, $totalquantite, $deliveryValue, $formatTotalWithDelivery, $totalWithDelivery) {
         if(count($_SESSION["cart"]) > 0) {
             for($i = 0; $i < count($_SESSION["cart"]); $i++) {
@@ -821,6 +821,7 @@ $totalWithDelivery = 0;
             }       
         }  
     }
+
 
     // VERIFICATION PASSWORD SECURISE
     //Must be a minimum of 8 characters
@@ -1225,9 +1226,6 @@ $totalWithDelivery = 0;
                     </div>
                   </div>
                 ";
-
         }
     }
-
-
 ?>

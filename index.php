@@ -71,8 +71,10 @@
                     <p class="m-0 mb-1">
                         <i class="fas fa-shopping-cart"></i>                        
                         <?php
+                        if (isset($_SESSION["idd"])) {
                             $totalquantite=0;
                             totalquantite($totalquantite);
+                        }
                         ?>
                     </p>
                 </div>
