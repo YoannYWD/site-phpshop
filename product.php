@@ -19,7 +19,7 @@
 <!-- IMPORT FUNCTIONS
 ------------------------------------------------------------------->
 <?php
-    require './components/functions.php';
+    include './functions.php';
 ?>
 
 
@@ -49,8 +49,8 @@
                     <p class="m-0 mb-1">
                         <i class="fas fa-shopping-cart"></i>                        
                         <?php
-                            $totalQuantity=0;
-                            totalQuantity($totalQuantity);
+                            $totalquantite=0;
+                            totalquantite($totalquantite);
                         ?>
                     </p>
                 </div>
@@ -64,7 +64,7 @@
         <?php
             //ID, paramètre de la fonction getArticle($id) dans functions.php
             $id = $_POST['id'];
-            showArticle($connection, $id)
+            showArticle($id)
         ?>
     </div>
     <div class="row text-center">
@@ -77,5 +77,5 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-    require './components/footer.php';
+    include './components/footer.php';
 ?>

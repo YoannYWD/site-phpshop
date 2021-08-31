@@ -2,8 +2,9 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    require './components/functions.php';
-    require './components/header.php';
+    include './functions.php';
+    include './components/header.php';
+    $connection = getConnection();
 
     //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
@@ -20,8 +21,8 @@
     if (isset($_POST['deleteAllArticles'])) {
         deleteAllArticles();
     }
-    if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
-        changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+    if (isset($_POST['changequantite']) && isset($_POST['changequantiteId'])) {
+        changequantite($_POST['changequantite'], ($_POST['changequantiteId']));
     }
     if(!isset($_SESSION['nom'])){ //if login in session is not set
         header("Location: index.php");
@@ -67,14 +68,14 @@
                 <?php
                 // calcul du prix final et de la quantité totale d'article
                 $total=0;
-                $totalQuantity=0;
-                finalTotalPrice($total, $totalQuantity);
+                $totalquantite=0;
+                finalTotalPrice($total, $totalquantite);
                 
                 // Prix avec frais de port
                 $total = 0;
                 $totalWithShippingFees = 0;
-                $totalQuantity=0;
-                priceWithShippingFees($total, $totalWithShippingFees, $totalQuantity);
+                $totalquantite=0;
+                priceWithShippingFees($total, $totalWithShippingFees, $totalquantite);
 
                 // bouton supprimer tous les articles
                 deleteAllBtnSc();
@@ -105,6 +106,6 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-    require './components/footer.php';
+    include './components/footer.php';
 ?>
 

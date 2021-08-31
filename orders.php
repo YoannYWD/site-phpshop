@@ -2,8 +2,9 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    require './components/functions.php';
-    require './components/header.php';
+    include './functions.php';
+    include './components/header.php';
+    $connection = getConnection();
 
     //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
@@ -53,13 +54,14 @@
                         </div>
                         <div class="col-md-2 align-self-center text-center">
                             <div class="card-body">
-                                <p class="card-text"><?= $order["prix"] ?>€</p>
+                                <p class="card-text"><?= number_format($order["prix"], 2, ",", " ") ?>€</p>
                             </div>
                         </div>
                         <div class="col-md-3 align-self-center text-center">
                             <div class="card-body">
-                                <form action="add-to-cart.php" method="post\">
-                                    <input type="submit" class="buttonLarge" value="Détails">
+                                <form action="details.php" method="post">
+                                    <input type="hidden" name="numero" value="<?= $order["numero"] ?>">
+                                    <input type="submit" class="buttonLarge" name="details" value="Détails">
                                 </form>
                             </div>
                         </div>
@@ -75,6 +77,6 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-    require './components/footer.php';
+    include './components/footer.php';
 ?>
 

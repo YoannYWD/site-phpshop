@@ -2,9 +2,9 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    require './components/functions.php';
-    require './components/header.php';
-
+    include './functions.php';
+    include './components/header.php';
+  
     //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
@@ -20,8 +20,8 @@
     if (isset($_POST['deleteAllArticles'])) {
         deleteAllArticles();
     }
-    if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
-        changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+    if (isset($_POST['changequantite']) && isset($_POST['changequantiteId'])) {
+        changequantite($_POST['changequantite'], ($_POST['changequantiteId']));
     }
     if (isset($_POST["validateAndDeleteAllArticles"])) {
         deleteAllArticles();
@@ -69,58 +69,19 @@
             <h5 class="text-center mt-2 mb-3">Votre adresse</h5>
                     <div class="col-12 text-center mb-5">
                         <?php
+
                             if (isset($_POST["mod_user"]) 
                             or isset($_POST["adresse"]) 
                             or isset($_POST["code_postal"])
                             or isset($_POST["ville"])) {
-                                $id = $_SESSION["idd"];
-                                $adresse = $_POST["adresse"];
-                                $code_postal = $_POST["code_postal"];
-                                $ville = $_POST["ville"];
-                                $sql = "UPDATE clients INNER JOIN adresses 
-                                        SET adresses.adresse = '$adresse',
-                                            adresses.code_postal = '$code_postal',
-                                            adresses.ville = '$ville'
-                                        WHERE adresses.id_client = '$id';";
-                                $statement = $connection->prepare($sql);
-                                $statement->execute();
-                                $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
-                                echo "<p class=\"text-center\">Les modifications ont été prises en compte :</p>";
+                                saveAdress();
                             }
-                            $nom = $_SESSION["nom"];
-                            $prenom = $_SESSION["prenom"];
-                            $id = $_SESSION["idd"];
-                            $sql = "SELECT c.nom, c.prenom, c.email, a.adresse, a.code_postal, a.ville FROM clients AS c
-                                    INNER JOIN adresses AS a
-                                    ON c.id = a.id_client
-                                    WHERE c.id = '$id';";
-                            $statement = $connection->prepare($sql);
-                            $statement->execute();
-                            $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
-                            echo "
-                                <p>" . $clientConnecte[0]["adresse"] . "</p>
-                                <p>" . $clientConnecte[0]["code_postal"] . " " . $clientConnecte[0]["ville"] . "</p>";
+                            displayAdress();
                         ?>
                     </div>
                     <div class="col-6 offset-3 text-center mb-5">
                         <?php
-                            $nom = $_SESSION["nom"];
-                            $prenom = $_SESSION["prenom"];
-                            $id = $_SESSION["idd"];
-                            $sql = "SELECT c.nom, c.prenom, c.email, a.adresse, a.code_postal, a.ville FROM clients AS c
-                                    INNER JOIN adresses AS a
-                                    ON c.id = a.id_client
-                                    WHERE c.id = '$id';";
-                            $statement = $connection->prepare($sql);
-                            $statement->execute();
-                            $clientConnecte = $statement->fetchAll(PDO::FETCH_ASSOC);
-                            echo "<form action=\"delivery.php\" method=\"post\">
-                            <h5 class=\"text-center mt-2 mb-3\">Modifier mon adresse</h5>
-                                    <input class=\"form-control\" type=\"text\" name=\"adresse\" placeholder=\"Rue, boulevard, impasse...\" value=\"" . $clientConnecte[0]["adresse"] . "\">
-                                    <input class=\"form-control\" type=\"text\" name=\"code_postal\" placeholder=\"Code postal\" value=\"" . $clientConnecte[0]["code_postal"] . "\">
-                                    <input class=\"form-control\" type=\"text\" name=\"ville\" placeholder=\"Ville\" value=\"" . $clientConnecte[0]["ville"] . "\">
-                                    <input type=\"submit\" value=\"Valider mes modifications\" name=\"mod_user\" class=\"buttonLarge\"/>
-                                    </form>";
+                            modAdress();
                         ?>
                     </div>
 
@@ -128,8 +89,8 @@
                     $deliveryValue = 5;
                     $total = 0;
                     $totalWithShippingFees = 0;
-                    $totalQuantity=0;
-                    priceWithDelivery($total, $totalWithShippingFees, $totalQuantity, $deliveryValue);
+                    $totalquantite=0;
+                    priceWithDelivery($total, $totalWithShippingFees, $totalquantite, $deliveryValue);
                 ?>
             </div>
 
@@ -146,13 +107,13 @@
                     </div>
                     <div class="modal-body">
                         <?php
-                            displayModal($total, $totalWithShippingFees, $totalQuantity, $deliveryValue, $formatTotalWithDelivery);
+                            displayModal($total, $totalWithShippingFees, $totalquantite, $deliveryValue, $formatTotalWithDelivery, $totalWithDelivery);
                         ?>
                     </div>
                     <div class="modal-footer">
-                        <?php
-                            validateShoppingCart();
-                        ?>
+                        <form action="index.php" method="post">
+                            <input type="submit" name="validateAndDeleteAllArticles" value="Retour à la page d'accueil" class="buttonLargeImpact"/>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -160,7 +121,6 @@
         <div class="col-12">
             
             <?php
-                displayDeliveryCart();
                 backToArticles();
             ?>     
         </div>
@@ -171,6 +131,6 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-    require './components/footer.php';
+    include './components/footer.php';
 ?>
 

@@ -2,8 +2,8 @@
     //Démarrage d'une nouvelle session
     session_start();
 
-    require './components/functions.php';
-    require './components/header.php';
+    include './functions.php';
+    include './components/header.php';
 
     //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
@@ -50,15 +50,15 @@
 </div>
 
 <?php
-    if (isset($_POST['changeQuantity']) && isset($_POST['changeQuantityId'])) {
-        changeQuantity($_POST['changeQuantity'], ($_POST['changeQuantityId']));
+    if (isset($_POST['changequantite']) && isset($_POST['changequantiteId'])) {
+        changequantite($_POST['changequantite'], ($_POST['changequantiteId']));
     }
     if (isset($_POST['deleteArticle'])) {
         deleteArticle($_POST['deleteArticle']);
     }
     if (isset($_POST['id'])) {
         $id = $_POST['id']; //ID, paramètre de la fonction getArticle($id) dans functions.php
-        $article = getArticle($id, $connection); //ARTICLE, paramètre de la fonction showArticle($article) dans functions.php
+        $article = getArticle($id); //ARTICLE, paramètre de la fonction showArticle($article) dans functions.php
         addToCart($article);
     }
 ?>
@@ -76,7 +76,7 @@
         <div class="col-12 col-md-4 offset-md-4 col-xl-2 offset-xl-0 summary">
                 <?php
                     // calcul du prix final et de la quantité totale d'article
-                    totalPrice($total, $totalQuantity, $totalPrice);
+                    totalPrice($total, $totalquantite, $totalPrice);
 
                     // bouton supprimer tous les articles
                     deleteAllBtn();
@@ -101,6 +101,6 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-    require './components/footer.php';
+    include './components/footer.php';
 ?>
 

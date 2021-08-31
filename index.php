@@ -3,27 +3,15 @@
     session_start();
 
     // Import du fichier functions.php
-    require './components/functions.php';
+    include './functions.php';
+    include './db.php';
+    $connection = getConnection();
 
     //Si la session n'existe pas, on crée un nouveau panier
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
-    if (isset($_POST["validateAndDeleteAllArticles"])) {
-        $articleId = $_POST["articleId"];
-        $stock = $_POST["stock"];
-        $id_client = $_POST["id_client"];
-        $date_commande = $_POST["date_commande"];
-        $numero = $_POST["numero"];
-        $prix = $_POST["prix"];
-        $sql = "UPDATE articles SET articles.stock = '$stock' WHERE articles.id = '$articleId';";
-        $statement = $connection->prepare($sql);
-        $result = $statement->execute();;
-        $sql = "INSERT INTO commandes (id_client, numero, date_commande, prix) VALUES ('$id_client', '$numero', '$date_commande', '$prix');";
-        $statement = $connection->prepare($sql);
-        $result = $statement->execute();
-        $_SESSION["cart"] = [];
-    }
+
     if (isset($_POST["log_out"])) {
         unset($_SESSION["nom"]);
         unset($_SESSION["prenom"]);
@@ -38,23 +26,38 @@
 <!-- HEADER 
 ------------------------------------------------------------------->
 <?php
-    require './components/header.php';
+    include './components/header.php';
 ?>
 
 <div class="container titlePageContainer">
     <div class="row">
         <div class="col-12 text-center">
             <h1>À ne pas rater !</h1>
+
         </div>
     </div>
 </div>
+<?php
+    if (isset($_POST["validateAndDeleteAllArticles"])) {
+        saveOrder();  
+        $_SESSION["cart"] = [];
+
+        // $sql = "SELECT * FROM commandes WHERE commandes.id_client = '$id_client';";
+        // $statement = $connection->prepare($sql);
+        // $result = $statement->execute();
+        // $commandes = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+?>
+
+
 
 <!-- DISPLAY ARTICLES
 ------------------------------------------------------------------->
 <div class="container mainContainer">
     <div class="row">
         <?php
-            showArticles($connection);
+            showArticles();
         ?>
     </div>
 </div>
@@ -68,8 +71,8 @@
                     <p class="m-0 mb-1">
                         <i class="fas fa-shopping-cart"></i>                        
                         <?php
-                            $totalQuantity=0;
-                            totalQuantity($totalQuantity);
+                            $totalquantite=0;
+                            totalquantite($totalquantite);
                         ?>
                     </p>
                 </div>
@@ -83,5 +86,5 @@
 <!-- FOOTER
 ------------------------------------------------------------------->
 <?php
-    require './components/footer.php';
+    include './components/footer.php';
 ?>
